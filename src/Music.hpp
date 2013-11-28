@@ -1,14 +1,18 @@
 #ifndef _Music_hpp_
 #define _Music_hpp_
 
-#include "Sound.hpp"
+#include "Internal/Sound.hpp"
 
 #include <AL/al.h>
-
 #include <sndfile.h>
 
 #include <string>
 #include <vector>
+
+#include <memory>
+#include <chrono>
+#include <thread>
+#include <mutex>
 
 class Music : public Sound
 {
@@ -19,11 +23,11 @@ private:
         std::size_t sampleCount;
     };
 
-    static const unsigned int BUFFER_COUNT = 5;
+    static const unsigned int BUFFER_COUNT = 4;
 
     SNDFILE* file;
 
-    // GLFWthread thread;
+    std::unique_ptr<std::thread> streamThread;
     bool streaming;
     unsigned int buffers[BUFFER_COUNT];
     bool endBuffers[BUFFER_COUNT];
@@ -40,6 +44,9 @@ private:
     float duration;
 
     std::vector<short> buffer;
+
+protected:
+    static void streamData(Music* m);
 
 public:
     Music();
@@ -64,7 +71,7 @@ public:
     void clearQueue();
 
     void setStream(bool value);
-    bool isStreaming();
+    const bool isStreaming() const;
     ALint buffersProcessed();
 
     unsigned int popBuffer();
@@ -78,4 +85,4 @@ public:
     bool getEndBuffer(unsigned int bufferNum);
 };
 
-#endif
+#endif // _Music_hpp_

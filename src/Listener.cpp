@@ -1,9 +1,9 @@
 #include "Listener.hpp"
 
-#include "System/Log.hpp"
-
 #include <AL/al.h>
 #include <AL/alc.h>
+
+#include "System/Log.hpp"
 
 ALCdevice* Listener::device = NULL;
 ALCcontext* Listener::context = NULL;

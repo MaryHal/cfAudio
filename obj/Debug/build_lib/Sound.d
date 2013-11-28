@@ -1,13 +1,14 @@
-obj/Debug/build_lib/Sound.o: src/Sound.cpp src/Sound.hpp \
- src/SoundBuffer.hpp src/Memory/Buffer.hpp src/SoundLoader.hpp \
- src/System/Log.hpp
+obj/Debug/build_lib/Sound.o: src/Internal/Sound.cpp \
+ src/Internal/Sound.hpp src/Internal/SoundBuffer.hpp \
+ src/Internal/../Memory/Buffer.hpp src/Internal/SoundLoader.hpp \
+ src/Internal/../System/Log.hpp
 
-src/Sound.hpp:
+src/Internal/Sound.hpp:
 
-src/SoundBuffer.hpp:
+src/Internal/SoundBuffer.hpp:
 
-src/Memory/Buffer.hpp:
+src/Internal/../Memory/Buffer.hpp:
 
-src/SoundLoader.hpp:
+src/Internal/SoundLoader.hpp:
 
-src/System/Log.hpp:
+src/Internal/../System/Log.hpp:

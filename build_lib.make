@@ -152,14 +152,13 @@ ifeq ($(config),release64)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/Sound.o \
 	$(OBJDIR)/Sample.o \
-	$(OBJDIR)/SoundStream.o \
 	$(OBJDIR)/Music.o \
 	$(OBJDIR)/Listener.o \
+	$(OBJDIR)/Buffer.o \
+	$(OBJDIR)/Sound.o \
 	$(OBJDIR)/SoundLoader.o \
 	$(OBJDIR)/SoundBuffer.o \
-	$(OBJDIR)/Buffer.o \
 	$(OBJDIR)/Log.o \
 
 RESOURCES := \
@@ -221,13 +220,7 @@ $(GCH): $(PCH)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 endif
 
-$(OBJDIR)/Sound.o: src/Sound.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/Sample.o: src/Sample.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/SoundStream.o: src/SoundStream.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/Music.o: src/Music.cpp
@@ -236,13 +229,16 @@ $(OBJDIR)/Music.o: src/Music.cpp
 $(OBJDIR)/Listener.o: src/Listener.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/SoundLoader.o: src/SoundLoader.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/SoundBuffer.o: src/SoundBuffer.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/Buffer.o: src/Memory/Buffer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/Sound.o: src/Internal/Sound.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/SoundLoader.o: src/Internal/SoundLoader.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/SoundBuffer.o: src/Internal/SoundBuffer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/Log.o: src/System/Log.cpp

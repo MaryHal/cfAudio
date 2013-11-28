@@ -1,4 +1,4 @@
 cfAudio
 =======
 
-Portable C++ Audio Library
+Simple C++ Audio Library that interfaces with OpenAL and libsndfile.

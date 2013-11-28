@@ -1,8 +1,60 @@
 #include "Music.hpp"
 
-#include "SoundLoader.hpp"
-#include "SoundStream.hpp"
+#include "Internal/SoundLoader.hpp"
 #include "System/Log.hpp"
+
+void Music::streamData(Music* m)
+{
+    bool requestStop = m->fillQueue();
+    m->play();
+
+    while (m->isStreaming())
+    {
+        log("Streaming...");
+        ALint nbProcessed = m->buffersProcessed();
+
+        while (nbProcessed--)
+        {
+            ALuint buffer = m->popBuffer();
+            unsigned int bufferNum = m->getBufferNum(buffer);
+
+            // Retrieve its size and add it to the samples count
+            if (m->getEndBuffer(bufferNum))
+            {
+                // This was the last buffer: reset the sample count
+                m->setSamplesProcessed(0);
+                m->setEndBuffer(bufferNum, false);
+            }
+            else
+            {
+                ALint size, bits;
+                alGetBufferi(buffer, AL_SIZE, &size);
+                alGetBufferi(buffer, AL_BITS, &bits);
+                m->addSamplesProcessed(size / (bits / 8));
+            }
+
+            // Fill it and push it back into the playing queue
+            if (!requestStop)
+            {
+                if (m->fillAndPushBuffer(bufferNum))
+                    requestStop = true;
+            }
+        }
+
+        // Leave some time for the other threads if the stream is still playing
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    }
+
+    log("Stopping...");
+    // Stop the playback
+    m->stop();
+
+    log("Clearing Queue...");
+    // Unqueue any buffer left in the queue
+    m->clearQueue();
+
+    log("Music Stream Thread Killed");
+}
 
 Music::Music()
 {
@@ -10,12 +62,13 @@ Music::Music()
 
 Music::Music(const std::string& filename)
     : file(NULL),
-    streaming(false),
-    loop(false),
-    sampleCount(0),
-    channelCount(0),
-    sampleRate(0),
-    samplesProcessed(0)
+      streamThread(nullptr),
+      streaming(false),
+      loop(false),
+      sampleCount(0),
+      channelCount(0),
+      sampleRate(0),
+      samplesProcessed(0)
 {
     // Generate Buffers
     alGenBuffers(BUFFER_COUNT, buffers);
@@ -45,7 +98,7 @@ void Music::play()
         streaming = true;
         samplesProcessed = 0;
         seek(0);
-        // thread = glfwCreateThread(&SoundStream::streamData, this);
+        streamThread.reset(new std::thread(&Music::streamData, this));
     }
     else
     {
@@ -59,7 +112,7 @@ void Music::stop()
     {
         Sound::stop();
         streaming = false;
-        // glfwWaitThread(thread, GLFW_WAIT);
+        streamThread->join();
 
         samplesProcessed = 0;
     }
@@ -67,7 +120,8 @@ void Music::stop()
 
 void Music::seek(float time)
 {
-    // GLFWmutex mutex = glfwCreateMutex();
+    std::mutex threadMutex;
+    threadMutex.lock();
 
     if (file)
     {
@@ -75,7 +129,7 @@ void Music::seek(float time)
         sf_seek(file, frameOffset, SEEK_SET);
     }
 
-    // glfwDestroyMutex(mutex);
+    threadMutex.unlock();
 }
 
 float Music::getDuration()
@@ -134,7 +188,8 @@ void Music::loadSound(const std::string& filename)
 
 bool Music::loadChunk(SoundChunk& c)
 {
-    // GLFWmutex mutex = glfwCreateMutex();
+    std::mutex threadMutex;
+    threadMutex.lock();
 
     c.samples = &buffer[0];
 
@@ -143,7 +198,7 @@ bool Music::loadChunk(SoundChunk& c)
     else
         c.sampleCount = 0;
 
-    // glfwDestroyMutex(mutex);
+    threadMutex.unlock();
 
     return c.sampleCount == buffer.size();
 }
@@ -205,10 +260,12 @@ bool Music::fillAndPushBuffer(unsigned int bufferNum)
 
 void Music::clearQueue()
 {
+    log("Getting queued buffer count");
     // Get the number of buffers still in the queue
     ALint nbQueued;
     alGetSourcei(source, AL_BUFFERS_QUEUED, &nbQueued);
 
+    log("Unqueuing");
     // Unqueue them all
     ALuint buffer;
     for (ALint i = 0; i < nbQueued; ++i)
@@ -220,7 +277,7 @@ void Music::setStream(bool value)
     streaming = value;
 }
 
-bool Music::isStreaming()
+const bool Music::isStreaming() const
 {
     return streaming;
 }

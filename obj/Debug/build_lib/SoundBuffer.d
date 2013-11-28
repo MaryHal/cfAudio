@@ -1,8 +1,9 @@
-obj/Debug/build_lib/SoundBuffer.o: src/SoundBuffer.cpp \
- src/SoundBuffer.hpp src/Memory/Buffer.hpp src/SoundLoader.hpp
+obj/Debug/build_lib/SoundBuffer.o: src/Internal/SoundBuffer.cpp \
+ src/Internal/SoundBuffer.hpp src/Internal/../Memory/Buffer.hpp \
+ src/Internal/SoundLoader.hpp
 
-src/SoundBuffer.hpp:
+src/Internal/SoundBuffer.hpp:
 
-src/Memory/Buffer.hpp:
+src/Internal/../Memory/Buffer.hpp:
 
-src/SoundLoader.hpp:
+src/Internal/SoundLoader.hpp:

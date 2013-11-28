@@ -1,12 +1,13 @@
-obj/Debug/build_lib/Sample.o: src/Sample.cpp src/Sample.hpp src/Sound.hpp \
- src/SoundBuffer.hpp src/Memory/Buffer.hpp src/SoundLoader.hpp
+obj/Debug/build_lib/Sample.o: src/Sample.cpp src/Sample.hpp \
+ src/Internal/Sound.hpp src/Internal/SoundBuffer.hpp \
+ src/Internal/../Memory/Buffer.hpp src/Internal/SoundLoader.hpp
 
 src/Sample.hpp:
 
-src/Sound.hpp:
+src/Internal/Sound.hpp:
 
-src/SoundBuffer.hpp:
+src/Internal/SoundBuffer.hpp:
 
-src/Memory/Buffer.hpp:
+src/Internal/../Memory/Buffer.hpp:
 
-src/SoundLoader.hpp:
+src/Internal/SoundLoader.hpp:

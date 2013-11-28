@@ -6,11 +6,11 @@ typedef struct ALCcontext_struct ALCcontext;
 
 class Listener
 {
- private:
+private:
     static ALCdevice* device;
     static ALCcontext* context;
 
- public:
+public:
     static void init();
     static void deinit();
 

@@ -1,6 +1,5 @@
 #include "Sample.hpp"
-
-#include "SoundLoader.hpp"
+#include "Internal/SoundLoader.hpp"
 
 Sample::Sample()
     : Sound()
@@ -24,4 +23,3 @@ void Sample::loadSound(const std::string& filename)
     buffer.update();
     __setSource(buffer.getBufferID());
 }
-

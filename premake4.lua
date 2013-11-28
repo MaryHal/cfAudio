@@ -47,6 +47,7 @@ solution "cfAudio"
         language "C++"
         buildoptions { "-std=c++11" }
 
+        includedirs { "src/" }
         files { "test/**" }
 
         targetdir "bin"
@@ -79,6 +80,5 @@ solution "cfAudio"
             flags { "Symbols", "ExtraWarnings" }
 
         configuration "Release"
-            kind "WindowedApp"
+            kind "ConsoleApp"
             flags { "Optimize", "ExtraWarnings" }
-
