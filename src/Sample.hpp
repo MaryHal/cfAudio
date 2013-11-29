@@ -9,7 +9,6 @@ private:
     SoundBuffer buffer;
 
 public:
-    Sample();
     Sample(const std::string& filename);
     ~Sample();
 

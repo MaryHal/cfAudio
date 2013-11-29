@@ -2,26 +2,60 @@
 #include "Sample.hpp"
 #include "Music.hpp"
 
-#include <iostream>
-
-#include <chrono>
-#include <thread>
+#include <curses.h>
 
 int main(int argc, char* argv[])
 {
     Listener::init();
 
     Sample sample1("data/Coin.wav");
-    sample1.play();
-    // Sample sample2("data/Powerup.wav");
-    // sample2.play();
+    Sample sample2("data/Powerup.wav");
+    Sample sample3("data/Randomize.wav");
     Music music("data/Melodica.ogg");
-    music.play();
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(30000));
+    // Curses initialization
+    initscr();
+    cbreak();
+    noecho();
+    // nodelay(stdscr, true);
+    keypad(stdscr, true);
 
-    std::cout << "Done" << std::endl;
+    for (;;)
+    {
+        clear();
+
+        // Draw
+        waddstr(stdscr, "Press a to play, q to quit. 1, 2, and 3 play various sounds.");
+        wrefresh(stdscr);
+
+        // Handle Input
+        int ch = getch();
+        if (ch == 'q') // Escape or alt
+        {
+            break;
+        }
+        else if (ch == 'a')
+        {
+            music.play();
+        }
+        else if (ch == '1')
+        {
+            sample1.play();
+        }
+        else if (ch == '2')
+        {
+            sample2.play();
+        }
+        else if (ch == '3')
+        {
+            sample3.play();
+        }
+    }
+
+    // Curses cleanup
+    endwin();
 
     Listener::deinit();
     return 0;
 }
+

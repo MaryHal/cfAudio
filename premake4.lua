@@ -56,7 +56,7 @@ solution "cfAudio"
         ---------------------------------------
         -- Link static libraries and config
         libdirs ("lib")
-        links { "openal", "sndfile" }
+        links { "curses", "openal", "sndfile" }
 
         configuration "linux"
             targetprefix "linux_"

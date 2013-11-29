@@ -16,73 +16,74 @@
 
 class Music : public Sound
 {
-private:
-    struct SoundChunk
-    {
-        short* samples;
-        std::size_t sampleCount;
-    };
+    public:
+        Music(const std::string& filename);
+        ~Music();
 
-    static const unsigned int BUFFER_COUNT = 4;
+        void play();
+        void stop();
 
-    SNDFILE* file;
+        void seek(float time);
+        float getDuration();
+        float getTime();
 
-    std::unique_ptr<std::thread> streamThread;
-    bool streaming;
-    unsigned int buffers[BUFFER_COUNT];
-    bool endBuffers[BUFFER_COUNT];
+        void setLoop(bool value);
+        bool getLoop();
 
-    bool loop;
+    private:
+        struct SoundChunk
+        {
+            short* samples;
+            std::size_t sampleCount;
+        };
 
-    std::size_t  sampleCount;
-    unsigned int channelCount;
-    unsigned int sampleRate;
+        void loadSound(const std::string& filename);
+        bool loadChunk(SoundChunk& c);
 
-    ALenum format;
-    unsigned long samplesProcessed;
+        bool fillQueue();
+        bool fillAndPushBuffer(unsigned int bufferNum);
+        void clearQueue();
 
-    float duration;
+        void setStream(bool value);
+        const bool isStreaming() const;
+        ALint buffersProcessed();
 
-    std::vector<short> buffer;
+        unsigned int popBuffer();
+        unsigned int getBufferNum(ALuint buffer);
 
-protected:
-    static void streamData(Music* m);
+        void setSamplesProcessed(unsigned long i);
+        void addSamplesProcessed(unsigned long i);
+        unsigned long getSamplesProcessed();
 
-public:
-    Music();
-    Music(const std::string& filename);
-    ~Music();
+        void setEndBuffer(unsigned int bufferNum, bool value);
+        bool getEndBuffer(unsigned int bufferNum);
 
-    void play();
-    void stop();
+        static void streamData(Music* m);
 
-    void seek(float time);
-    float getDuration();
-    float getTime();
+    private:
+        static const unsigned int BUFFER_COUNT = 4;
 
-    void setLoop(bool value);
-    bool getLoop();
+        SNDFILE* file;
 
-    void loadSound(const std::string& filename);
-    bool loadChunk(SoundChunk& c);
+        std::unique_ptr<std::thread> streamThread;
+        bool streaming;
+        unsigned int buffers[BUFFER_COUNT];
+        bool endBuffers[BUFFER_COUNT];
 
-    bool fillQueue();
-    bool fillAndPushBuffer(unsigned int bufferNum);
-    void clearQueue();
+        bool loop;
 
-    void setStream(bool value);
-    const bool isStreaming() const;
-    ALint buffersProcessed();
+        std::size_t  sampleCount;
+        unsigned int channelCount;
+        unsigned int sampleRate;
 
-    unsigned int popBuffer();
-    unsigned int getBufferNum(ALuint buffer);
+        ALenum format;
+        unsigned long samplesProcessed;
 
-    void setSamplesProcessed(unsigned long i);
-    void addSamplesProcessed(unsigned long i);
-    unsigned long getSamplesProcessed();
+        float duration;
 
-    void setEndBuffer(unsigned int bufferNum, bool value);
-    bool getEndBuffer(unsigned int bufferNum);
+        std::vector<short> buffer;
+
 };
 
 #endif // _Music_hpp_
+

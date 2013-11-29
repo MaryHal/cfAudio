@@ -3,63 +3,6 @@
 #include "Internal/SoundLoader.hpp"
 #include "System/Log.hpp"
 
-void Music::streamData(Music* m)
-{
-    bool requestStop = m->fillQueue();
-    m->play();
-
-    while (m->isStreaming())
-    {
-        log("Streaming...");
-        ALint nbProcessed = m->buffersProcessed();
-
-        while (nbProcessed--)
-        {
-            ALuint buffer = m->popBuffer();
-            unsigned int bufferNum = m->getBufferNum(buffer);
-
-            // Retrieve its size and add it to the samples count
-            if (m->getEndBuffer(bufferNum))
-            {
-                // This was the last buffer: reset the sample count
-                m->setSamplesProcessed(0);
-                m->setEndBuffer(bufferNum, false);
-            }
-            else
-            {
-                ALint size, bits;
-                alGetBufferi(buffer, AL_SIZE, &size);
-                alGetBufferi(buffer, AL_BITS, &bits);
-                m->addSamplesProcessed(size / (bits / 8));
-            }
-
-            // Fill it and push it back into the playing queue
-            if (!requestStop)
-            {
-                if (m->fillAndPushBuffer(bufferNum))
-                    requestStop = true;
-            }
-        }
-
-        // Leave some time for the other threads if the stream is still playing
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    }
-
-    log("Stopping...");
-    // Stop the playback
-    m->stop();
-
-    log("Clearing Queue...");
-    // Unqueue any buffer left in the queue
-    m->clearQueue();
-
-    log("Music Stream Thread Killed");
-}
-
-Music::Music()
-{
-}
-
 Music::Music(const std::string& filename)
     : file(NULL),
       streamThread(nullptr),
@@ -70,12 +13,6 @@ Music::Music(const std::string& filename)
       sampleRate(0),
       samplesProcessed(0)
 {
-    // Generate Buffers
-    alGenBuffers(BUFFER_COUNT, buffers);
-    for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
-        endBuffers[i] = false;
-
-    __generateSource();
     loadSound(filename);
 }
 
@@ -157,6 +94,12 @@ bool Music::getLoop()
 
 void Music::loadSound(const std::string& filename)
 {
+    // Generate Buffers
+    alGenBuffers(BUFFER_COUNT, buffers);
+    for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
+        endBuffers[i] = false;
+    __generateSource();
+
     SF_INFO FileInfos;
     file = sf_open(filename.c_str(), SFM_READ, &FileInfos);
     if (!file)
@@ -337,4 +280,57 @@ void Music::setEndBuffer(unsigned int bufferNum, bool value)
 bool Music::getEndBuffer(unsigned int bufferNum)
 {
     return endBuffers[bufferNum];
+}
+
+void Music::streamData(Music* m)
+{
+    bool requestStop = m->fillQueue();
+    m->play();
+
+    while (m->isStreaming())
+    {
+        log("Streaming...");
+        ALint nbProcessed = m->buffersProcessed();
+
+        while (nbProcessed--)
+        {
+            ALuint buffer = m->popBuffer();
+            unsigned int bufferNum = m->getBufferNum(buffer);
+
+            // Retrieve its size and add it to the samples count
+            if (m->getEndBuffer(bufferNum))
+            {
+                // This was the last buffer: reset the sample count
+                m->setSamplesProcessed(0);
+                m->setEndBuffer(bufferNum, false);
+            }
+            else
+            {
+                ALint size, bits;
+                alGetBufferi(buffer, AL_SIZE, &size);
+                alGetBufferi(buffer, AL_BITS, &bits);
+                m->addSamplesProcessed(size / (bits / 8));
+            }
+
+            // Fill it and push it back into the playing queue
+            if (!requestStop)
+            {
+                if (m->fillAndPushBuffer(bufferNum))
+                    requestStop = true;
+            }
+        }
+
+        // Leave some time for the other threads if the stream is still playing
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    }
+
+    log("Stopping...");
+    // Stop the playback
+    m->stop();
+
+    log("Clearing Queue...");
+    // Unqueue any buffer left in the queue
+    m->clearQueue();
+
+    log("Music Stream Thread Killed");
 }

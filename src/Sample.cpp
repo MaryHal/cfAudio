@@ -1,11 +1,6 @@
 #include "Sample.hpp"
 #include "Internal/SoundLoader.hpp"
 
-Sample::Sample()
-    : Sound()
-{
-}
-
 Sample::Sample(const std::string& filename)
     : Sound(filename)
 {
