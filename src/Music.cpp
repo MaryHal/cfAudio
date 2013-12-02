@@ -69,6 +69,12 @@ void Music::seek(float time)
     threadMutex.unlock();
 }
 
+void Music::relSeek(float time)
+{
+    float targetTime = getTime() + time;
+    seek(targetTime);
+}
+
 float Music::getDuration()
 {
     return duration;
@@ -94,6 +100,8 @@ bool Music::getLoop()
 
 void Music::loadSound(const std::string& filename)
 {
+    stop();
+
     // Generate Buffers
     alGenBuffers(BUFFER_COUNT, buffers);
     for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
@@ -171,7 +179,6 @@ bool Music::fillAndPushBuffer(unsigned int bufferNum)
 
         if (loop)
         {
-            logf("looping");
             seek(0);
 
             if (!chunk.samples || chunk.sampleCount == 0)
@@ -203,12 +210,10 @@ bool Music::fillAndPushBuffer(unsigned int bufferNum)
 
 void Music::clearQueue()
 {
-    log("Getting queued buffer count");
     // Get the number of buffers still in the queue
     ALint nbQueued;
     alGetSourcei(source, AL_BUFFERS_QUEUED, &nbQueued);
 
-    log("Unqueuing");
     // Unqueue them all
     ALuint buffer;
     for (ALint i = 0; i < nbQueued; ++i)
@@ -289,7 +294,6 @@ void Music::streamData(Music* m)
 
     while (m->isStreaming())
     {
-        log("Streaming...");
         ALint nbProcessed = m->buffersProcessed();
 
         while (nbProcessed--)
@@ -324,13 +328,9 @@ void Music::streamData(Music* m)
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 
-    log("Stopping...");
     // Stop the playback
     m->stop();
 
-    log("Clearing Queue...");
     // Unqueue any buffer left in the queue
     m->clearQueue();
-
-    log("Music Stream Thread Killed");
 }

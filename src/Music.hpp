@@ -24,6 +24,7 @@ class Music : public Sound
         void stop();
 
         void seek(float time);
+        void relSeek(float time);
         float getDuration();
         float getTime();
 
