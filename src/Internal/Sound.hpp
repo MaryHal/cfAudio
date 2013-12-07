@@ -6,8 +6,6 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-#include "SoundBuffer.hpp"
-
 enum Status
 {
     Stopped,

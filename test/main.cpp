@@ -15,11 +15,10 @@ int main(int argc, char* argv[])
     Music music("data/Melodica.ogg");
 
     music.play();
-    music.seek(100);
+    music.seek(0);
 
     for (;;)
     {
-        music.seek(200);
         printf("%f / %f\n", music.getTime(), music.getDuration());
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }

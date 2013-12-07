@@ -2,6 +2,7 @@
 #define _Sample_hpp_
 
 #include "Internal/Sound.hpp"
+#include "Internal/SoundBuffer.hpp"
 
 class Sample : public Sound
 {

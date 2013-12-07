@@ -34,7 +34,7 @@ void Music::play()
 
         streaming = true;
         samplesProcessed = 0;
-        seek(0);
+        //seek(0);
         streamThread.reset(new std::thread(&Music::streamData, this));
     }
     else
