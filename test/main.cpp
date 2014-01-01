@@ -15,7 +15,6 @@ int main(int argc, char* argv[])
     Music music("data/Melodica.ogg");
 
     music.play();
-    music.seek(0);
 
     for (;;)
     {

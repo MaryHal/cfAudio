@@ -13,7 +13,11 @@
     #define coreAssert(x,y) {}
 #endif
 
-void logf(const char* format, ...);
-void log(const std::string& str);
+class Console
+{
+    public:
+        static void logf(const char* format, ...);
+        static void log(const std::string& str);
+};
 
 #endif

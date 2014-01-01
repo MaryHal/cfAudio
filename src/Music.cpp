@@ -62,8 +62,9 @@ void Music::seek(float time)
 
     if (file)
     {
-        sf_count_t frameOffset = static_cast<sf_count_t>(time * 1000 * sampleRate);
-        sf_seek(file, frameOffset, SEEK_SET);
+        sf_count_t frameOffset = static_cast<sf_count_t>(time * sampleRate);
+        int code = sf_seek(file, frameOffset, SEEK_SET);
+        Console::logf("%d", code);
     }
 
     threadMutex.unlock();
@@ -129,7 +130,7 @@ void Music::loadSound(const std::string& filename)
         channelCount = 0;
         sampleRate   = 0;
 
-        logf("Unsupported number of channels (%d)", channelCount);
+        Console::logf("Unsupported number of channels (%d)", channelCount);
     }
 
     duration = static_cast<float>(sampleCount) / sampleRate / channelCount;
