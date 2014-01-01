@@ -22,7 +22,7 @@ void Listener::init()
     alListener3f(AL_VELOCITY, 0, 0, 0);
     alListener3f(AL_ORIENTATION, 0, 0, -1);
 
-    log("Listener Initialized.");
+    Console::log("Listener Initialized.");
 }
 
 void Listener::deinit()

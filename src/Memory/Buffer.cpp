@@ -52,7 +52,7 @@ void Buffer::setBuffer(char* buf, int bufferLength)
 
     external = true;
 
-    logf("%p, %d", data, length);
+    Console::logf("%p, %d", data, length);
 }
 
 bool Buffer::atEnd()
@@ -112,7 +112,7 @@ void Buffer::dumpBuffer()
 
     while (!atEnd())
     {
-        logf("%f", readFloat());
+        Console::logf("%f", readFloat());
     }
 }
 

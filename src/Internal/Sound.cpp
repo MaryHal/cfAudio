@@ -29,7 +29,7 @@ Sound::Sound(const std::string& filename)
     : status(Stopped),
     source(0)
 {
-    logf("Sound @ \"%s\" loaded.", filename.c_str());
+    Console::logf("Sound @ \"%s\" loaded.", filename.c_str());
 }
 
 Sound::~Sound()
@@ -39,7 +39,7 @@ Sound::~Sound()
 
 void Sound::play()
 {
-    logf("Play source: %d", source);
+    Console::logf("Play source: %d", source);
     status = Playing;
     alSourcePlay(source);
 }
