@@ -3,6 +3,8 @@
 #include "Internal/SoundLoader.hpp"
 #include "System/Log.hpp"
 
+#include <chrono>
+
 Music::Music(const std::string& filename)
     : file(NULL),
       streamThread(nullptr),
@@ -113,7 +115,7 @@ void Music::loadSound(const std::string& filename)
     file = sf_open(filename.c_str(), SFM_READ, &FileInfos);
     if (!file)
     {
-        //std::cerr << "Failed to read sound file \"" << Filename << "\"" << std::endl;
+        Console::logf("Failed to read sound file \"%s\"", filename.c_str());
         return;
     }
 
@@ -329,9 +331,9 @@ void Music::streamData(Music* m)
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 
-    // Stop the playback
     m->stop();
 
     // Unqueue any buffer left in the queue
     m->clearQueue();
 }
+

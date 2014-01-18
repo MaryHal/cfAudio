@@ -5,6 +5,8 @@
 #include <chrono>
 #include <thread>
 
+#include <string>
+
 int main(int argc, char* argv[])
 {
     Listener::init();
