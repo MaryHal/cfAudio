@@ -66,7 +66,7 @@ void Music::seek(float time)
     {
         sf_count_t frameOffset = static_cast<sf_count_t>(time * sampleRate);
         int code = sf_seek(file, frameOffset, SEEK_SET);
-        Console::logf("%d", code);
+        Console::logf("seek %d", code);
     }
 
     threadMutex.unlock();

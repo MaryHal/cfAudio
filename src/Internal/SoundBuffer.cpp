@@ -35,7 +35,10 @@ void SoundBuffer::loadFromFile(const std::string& filename)
 
     // Read Data
     allocateData(sampleCount * sizeof(short));
-    static_cast<std::size_t>(sf_read_short(myFile, (short*)data, sampleCount));
+    if (static_cast<std::size_t>(sf_read_short(myFile, (short*)data, sampleCount)) == sampleCount)
+    {
+        update();
+    }
 
     sf_close(myFile);
 
@@ -64,12 +67,12 @@ void SoundBuffer::update()
     // myDuration = static_cast<float>(mySamples.size()) / SampleRate / ChannelsCount;
 }
 
-const unsigned int SoundBuffer::getBufferID() const
+unsigned int SoundBuffer::getBufferID() const
 {
     return buffer;
 }
 
-const std::size_t SoundBuffer::getSampleCount() const
+std::size_t SoundBuffer::getSampleCount() const
 {
     return sampleCount;
 }

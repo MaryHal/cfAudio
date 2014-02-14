@@ -21,9 +21,9 @@ public:
     void loadFromFile(const std::string& filename);
 
     void update();
-    const unsigned int getBufferID() const;
+    unsigned int getBufferID() const;
 
-    const std::size_t getSampleCount() const;
+    size_t getSampleCount() const;
 };
 
 #endif
