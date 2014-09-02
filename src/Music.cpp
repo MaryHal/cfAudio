@@ -37,7 +37,7 @@ void Music::play()
 
         streaming = true;
         samplesProcessed = 0;
-        seek(0);
+        // seek(0);
         streamThread.reset(new std::thread(&Music::streamData, this));
     }
     else
@@ -53,6 +53,9 @@ void Music::stop()
         Sound::stop();
         streaming = false;
         streamThread->join();
+
+        seek(0.0);
+        clearQueue();
 
         samplesProcessed = 0;
     }
@@ -162,7 +165,7 @@ bool Music::fillQueue()
 {
     // Fill and enqueue all the available buffers
     bool requestStop = false;
-    for (unsigned int i = 0; (i < BUFFER_COUNT) && !requestStop; ++i)
+    for (unsigned int i = 0; (i < BUFFER_COUNT && !requestStop); ++i)
     {
         if (fillAndPushBuffer(i))
             requestStop = true;
@@ -298,9 +301,9 @@ void Music::streamData(Music* m)
 
     while (m->isStreaming())
     {
-        ALint nbProcessed = m->buffersProcessed();
+        ALint processedCount = m->buffersProcessed();
 
-        while (nbProcessed--)
+        while (processedCount--)
         {
             ALuint buffer = m->popBuffer();
             unsigned int bufferNum = m->getBufferNum(buffer);
@@ -317,6 +320,7 @@ void Music::streamData(Music* m)
                 ALint size, bits;
                 alGetBufferi(buffer, AL_SIZE, &size);
                 alGetBufferi(buffer, AL_BITS, &bits);
+
                 m->addSamplesProcessed(size / (bits / 8));
             }
 
@@ -332,7 +336,7 @@ void Music::streamData(Music* m)
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 
-    m->stop();
+    // m->stop();
 
     // Unqueue any buffer left in the queue
     m->clearQueue();

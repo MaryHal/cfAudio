@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     // Sample sample2("data/Powerup.wav");
     // Sample sample3("data/Randomize.wav");
 
-    std::unique_ptr<Sound> music(new Music("data/hds.flac"));
+    std::unique_ptr<Sound> music(new Music("data/Melodica.ogg"));
 
     music->setVolume(0.7f);
     music->play();

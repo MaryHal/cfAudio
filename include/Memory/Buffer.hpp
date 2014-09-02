@@ -5,55 +5,55 @@
 
 class Buffer
 {
-protected:
-    char* data;
-    size_t length;
-    char* bufferEnd;
+    protected:
+        char* data;
+        size_t length;
+        char* bufferEnd;
 
-    char* readLoc;
-    char* writeLoc;
+        char* readLoc;
+        char* writeLoc;
 
-    bool external;
+        bool external;
 
-public:
-    Buffer();
-    Buffer(size_t maxSize);
-    Buffer(char* buf, int bufferLength);
+    public:
+        Buffer();
+        Buffer(size_t maxSize);
+        Buffer(char* buf, int bufferLength);
 
-    virtual ~Buffer();
+        virtual ~Buffer();
 
-    void allocateData(size_t maxSize);
-    void setBuffer(char* buf, int bufferLength);
+        void allocateData(size_t maxSize);
+        void setBuffer(char* buf, int bufferLength);
 
-    bool atEnd();
-    size_t size();
+        bool atEnd();
+        size_t size();
 
-    void rewind();
-    void move(int offset);
-    void clear();
+        void rewind();
+        void move(int offset);
+        void clear();
 
-    void append(Buffer* b);
+        void append(Buffer* b);
 
-    char* getData();
+        char* getData();
 
-    void setWriteLoc(int count, size_t bytesPerCount);
-    void setReadLoc(int count, size_t bytesPerCount);
-    template<class T> void setWriteLoc(int count)
-    {
-        writeLoc = data + sizeof(T) * count;
-    }
-    template<class T> void setReadLoc(int count)
-    {
-        readLoc = data + sizeof(T) * count;
-    }
+        void setWriteLoc(int count, size_t bytesPerCount);
+        void setReadLoc(int count, size_t bytesPerCount);
+        template<class T> void setWriteLoc(int count)
+        {
+            writeLoc = data + sizeof(T) * count;
+        }
+        template<class T> void setReadLoc(int count)
+        {
+            readLoc = data + sizeof(T) * count;
+        }
 
-    // used for making display lists that will pass these buffers directly to OpenGL;  no converting into global endianness!
-    //void writeUint16Native(uint16 value);
+        // used for making display lists that will pass these buffers directly to OpenGL;  no converting into global endianness!
+        //void writeUint16Native(uint16 value);
 
-    float readFloat();
-    void writeFloat(float value);
+        float readFloat();
+        void writeFloat(float value);
 
-    void dumpBuffer();
+        void dumpBuffer();
 };
 
 #endif

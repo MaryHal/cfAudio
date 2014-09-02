@@ -42,6 +42,8 @@ class Music : public Sound
 
     private:
         // Load a single chunk of data from the stream file into "c".
+        // Returns true if load was successful, false if next chunk cannot be loaded
+        // (due to error, or if there is no more data to load).
         bool loadChunk(SoundChunk& c);
 
     public:
@@ -53,8 +55,12 @@ class Music : public Sound
         // Getters and setters that need to be visible for the streamData function.
         void setStream(bool value);
         const bool isStreaming() const;
+
+        // Returns the number of processed buffers. I.e., the number of buffers that need
+        // to be filled with new data.
         ALint buffersProcessed();
 
+        // Returns the buffer handle for an unused buffer.
         unsigned int popBuffer();
         unsigned int getBufferNum(ALuint buffer);
 
