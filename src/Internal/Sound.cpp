@@ -1,5 +1,5 @@
-#include "Sound.hpp"
-#include "SoundLoader.hpp"
+#include <Internal/Sound.hpp>
+#include <Internal/SoundLoader.hpp>
 
 #include "../System/Log.hpp"
 

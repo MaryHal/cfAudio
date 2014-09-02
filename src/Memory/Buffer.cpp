@@ -1,4 +1,4 @@
-#include "Buffer.hpp"
+#include <Memory/Buffer.hpp>
 
 #include "../System/Log.hpp"
 #include <cstring>
@@ -115,5 +115,3 @@ void Buffer::dumpBuffer()
         Console::logf("%f", readFloat());
     }
 }
-
-

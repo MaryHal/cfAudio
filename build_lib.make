@@ -24,7 +24,7 @@ ifeq ($(config),debug)
   TARGETDIR  = lib
   TARGET     = $(TARGETDIR)/libcfAudio64.a
   DEFINES   += -DDEBUG
-  INCLUDES  += 
+  INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall -std=c++11
   CXXFLAGS  += $(CFLAGS) 
@@ -46,7 +46,7 @@ ifeq ($(config),release)
   TARGETDIR  = lib
   TARGET     = $(TARGETDIR)/libcfAudio64.a
   DEFINES   += 
-  INCLUDES  += 
+  INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -O2 -Wall -std=c++11
   CXXFLAGS  += $(CFLAGS) 
@@ -68,7 +68,7 @@ ifeq ($(config),debug32)
   TARGETDIR  = lib
   TARGET     = $(TARGETDIR)/libcfAudio32.a
   DEFINES   += -DDEBUG
-  INCLUDES  += 
+  INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall -m32 -std=c++11
   CXXFLAGS  += $(CFLAGS) 
@@ -90,7 +90,7 @@ ifeq ($(config),release32)
   TARGETDIR  = lib
   TARGET     = $(TARGETDIR)/libcfAudio32.a
   DEFINES   += 
-  INCLUDES  += 
+  INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -O2 -Wall -m32 -std=c++11
   CXXFLAGS  += $(CFLAGS) 
@@ -112,7 +112,7 @@ ifeq ($(config),debug64)
   TARGETDIR  = lib
   TARGET     = $(TARGETDIR)/libcfAudio64.a
   DEFINES   += -DDEBUG
-  INCLUDES  += 
+  INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall -m64 -std=c++11
   CXXFLAGS  += $(CFLAGS) 
@@ -134,7 +134,7 @@ ifeq ($(config),release64)
   TARGETDIR  = lib
   TARGET     = $(TARGETDIR)/libcfAudio64.a
   DEFINES   += 
-  INCLUDES  += 
+  INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -O2 -Wall -m64 -std=c++11
   CXXFLAGS  += $(CFLAGS) 

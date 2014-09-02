@@ -1,8 +1,10 @@
-#include "SoundBuffer.hpp"
-#include "SoundLoader.hpp"
+#include <Internal/SoundBuffer.hpp>
+#include <Internal/SoundLoader.hpp>
 
 #include <AL/al.h>
 #include <sndfile.h>
+
+#include "../System/Log.hpp"
 
 SoundBuffer::SoundBuffer()
 {
@@ -24,7 +26,7 @@ void SoundBuffer::loadFromFile(const std::string& filename)
     SNDFILE* myFile = sf_open(filename.c_str(), SFM_READ, &FileInfos);
     if (!myFile)
     {
-        //std::cerr << "Failed to read sound file \"" << Filename << "\"" << std::endl;
+        Console::logf("Failed to load \"%s\".", filename.c_str());
         return;
     }
 
@@ -49,13 +51,13 @@ void SoundBuffer::loadFromFile(const std::string& filename)
 
 void SoundBuffer::update()
 {
-    // Find the good format according to the number of channels
+    // Find a good format according to the number of channels
     ALenum format = SoundLoader::getFormat(channelCount);
 
     // Check if the format is valid
     if (format == 0)
     {
-        //std::cerr << "Unsupported number of channels (" << ChannelsCount << ")" << std::endl;
+        Console::logf("Unsupported number of channels (%d).", channelCount);
         return;
     }
 
@@ -76,4 +78,3 @@ std::size_t SoundBuffer::getSampleCount() const
 {
     return sampleCount;
 }
-

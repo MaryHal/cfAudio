@@ -8,8 +8,7 @@ solution "cfAudio"
         language "C++"
         buildoptions { "-std=c++11" }
 
-        includedirs { }
-
+        includedirs { "include" }
         files { "src/**" }
 
         targetdir "lib"
@@ -43,11 +42,13 @@ solution "cfAudio"
             kind "StaticLib"
             flags { "Optimize", "ExtraWarnings" }
 
+
+
     project "build_test"
         language "C++"
         buildoptions { "-std=c++11" }
 
-        includedirs { "src/" }
+        includedirs { "include/" }
         files { "test/**" }
 
         targetdir "bin"

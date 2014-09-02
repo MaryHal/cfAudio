@@ -1,5 +1,5 @@
-#include "Sample.hpp"
-#include "Internal/SoundLoader.hpp"
+#include <Sample.hpp>
+#include <Internal/SoundLoader.hpp>
 
 Sample::Sample(const std::string& filename)
     : Sound(filename)

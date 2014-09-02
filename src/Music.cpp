@@ -1,6 +1,6 @@
-#include "Music.hpp"
+#include <Music.hpp>
+#include <Internal/SoundLoader.hpp>
 
-#include "Internal/SoundLoader.hpp"
 #include "System/Log.hpp"
 
 #include <chrono>
@@ -36,7 +36,7 @@ void Music::play()
 
         streaming = true;
         samplesProcessed = 0;
-        //seek(0);
+        seek(0);
         streamThread.reset(new std::thread(&Music::streamData, this));
     }
     else
@@ -64,8 +64,8 @@ void Music::seek(float time)
 
     if (file)
     {
-        sf_count_t frameOffset = static_cast<sf_count_t>(time * sampleRate);
-        int code = sf_seek(file, frameOffset, SEEK_SET);
+        sf_count_t offset = static_cast<sf_count_t>(time * sampleRate);
+        int code = sf_seek(file, offset, SEEK_SET);
         Console::logf("seek %d", code);
     }
 
@@ -115,7 +115,7 @@ void Music::loadSound(const std::string& filename)
     file = sf_open(filename.c_str(), SFM_READ, &FileInfos);
     if (!file)
     {
-        Console::logf("Failed to read sound file \"%s\"", filename.c_str());
+        Console::logf("Failed to load \"%s\".", filename.c_str());
         return;
     }
 
@@ -132,7 +132,7 @@ void Music::loadSound(const std::string& filename)
         channelCount = 0;
         sampleRate   = 0;
 
-        Console::logf("Unsupported number of channels (%d)", channelCount);
+        Console::logf("Unsupported number of channels (%d).", channelCount);
     }
 
     duration = static_cast<float>(sampleCount) / sampleRate / channelCount;
@@ -336,4 +336,3 @@ void Music::streamData(Music* m)
     // Unqueue any buffer left in the queue
     m->clearQueue();
 }
-

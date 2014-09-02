@@ -37,13 +37,21 @@ class Music : public Sound
             std::size_t sampleCount;
         };
 
+        // Load a Song from a file.
+        // Uses libsndfile, so supported filetypes are: OGG, WAV, and FLAC.
         void loadSound(const std::string& filename);
+
+    private:
+        // Load a single chunk of data from the stream file into "c".
         bool loadChunk(SoundChunk& c);
 
+    public:
+        // Fill OpenAL buffers
         bool fillQueue();
         bool fillAndPushBuffer(unsigned int bufferNum);
         void clearQueue();
 
+        // Getters and setters that need to be visible for the streamData function.
         void setStream(bool value);
         const bool isStreaming() const;
         ALint buffersProcessed();
@@ -58,6 +66,7 @@ class Music : public Sound
         void setEndBuffer(unsigned int bufferNum, bool value);
         bool getEndBuffer(unsigned int bufferNum);
 
+        // Threads run this function to load audio data
         static void streamData(Music* m);
 
     private:
@@ -82,8 +91,6 @@ class Music : public Sound
         float duration;
 
         std::vector<short> buffer;
-
 };
 
 #endif // _Music_hpp_
-

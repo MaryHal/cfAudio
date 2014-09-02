@@ -1,4 +1,4 @@
-#include "SoundLoader.hpp"
+#include <Internal/SoundLoader.hpp>
 
 ALenum SoundLoader::getFormat(unsigned int channels)
 {
