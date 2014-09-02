@@ -11,7 +11,6 @@
 
 #include <memory>
 #include <thread>
-#include <mutex>
 
 class Music : public Sound
 {
@@ -24,8 +23,8 @@ class Music : public Sound
 
         void seek(float time);
         void relSeek(float time);
-        float getDuration();
         float getTime();
+        float getDuration();
 
         void setLoop(bool value);
         bool getLoop();
@@ -76,11 +75,12 @@ class Music : public Sound
 
         std::unique_ptr<std::thread> streamThread;
         bool streaming;
-        unsigned int buffers[BUFFER_COUNT];
-        bool endBuffers[BUFFER_COUNT];
+        unsigned int buffers[BUFFER_COUNT]; // OpenAL buffer handles
+        bool endBuffers[BUFFER_COUNT];      // Buffer finished flags
 
         bool loop;
 
+        // Sound file data
         std::size_t  sampleCount;
         unsigned int channelCount;
         unsigned int sampleRate;

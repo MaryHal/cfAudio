@@ -4,6 +4,7 @@
 #include "System/Log.hpp"
 
 #include <chrono>
+#include <mutex>
 
 Music::Music(const std::string& filename)
     : file(NULL),
@@ -78,17 +79,17 @@ void Music::relSeek(float time)
     seek(targetTime);
 }
 
-float Music::getDuration()
-{
-    return duration;
-}
-
 float Music::getTime()
 {
     ALfloat secs = 0.f;
     alGetSourcef(source, AL_SEC_OFFSET, &secs);
 
     return secs + static_cast<float>(samplesProcessed) / sampleRate / channelCount;
+}
+
+float Music::getDuration()
+{
+    return duration;
 }
 
 void Music::setLoop(bool value)

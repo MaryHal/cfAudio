@@ -63,6 +63,19 @@ void Sound::pause()
     }
 }
 
+void Sound::playOrPause()
+{
+    if (status == Stopped || status == Paused)
+    {
+        play();
+    }
+    else
+    {
+        status = Paused;
+        alSourcePause(source);
+    }
+}
+
 void Sound::setVolume(float volume)
 {
     alSourcef(source, AL_GAIN, volume);
@@ -99,8 +112,9 @@ bool Sound::isPaused()
     return status == Paused;
 }
 
-void Sound::setTime(float time)
+void Sound::seek(float time)
 {
+    return;
 }
 
 float Sound::getTime()

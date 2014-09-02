@@ -27,6 +27,7 @@ class Sound
         virtual void play();
         virtual void stop();
         void pause();
+        void playOrPause();
 
         void setVolume(float volume);
         float getVolume();
@@ -37,9 +38,8 @@ class Sound
         virtual void setLoop(bool loop);
         virtual bool getLoop() const;
 
-        void setTime(float time);
+        virtual void seek(float time);
         virtual float getTime();
-
         virtual float getDuration();
 
         ALuint getSource();

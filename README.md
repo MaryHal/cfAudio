@@ -33,6 +33,6 @@ Deinitialize Listener when done:
 Issues
 ===========
 
-Currently, seeking while a song is playing/streaming results in varying behavior based on filetype. WAV files seem to work okay, OGG files segfault every time, and FLAC files hang indefinitely. Backtraces lead me to malloc errors within libsndfile...sometimes.
+Currently, seeking while a song is playing/streaming results in varying behavior based on filetype. WAV files seem to work okay, OGG files segfault every time, and FLAC files sometimes hang indefinitely. Backtraces lead me to malloc errors within libsndfile...sometimes.
 
 Playing OGG files results in some crackling noises in the background. From what I've researched, this seems to be a libsndfile problem.
