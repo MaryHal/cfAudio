@@ -89,6 +89,19 @@ float Sound::getVolume()
     return volume;
 }
 
+void Sound::setPan(float pan)
+{
+    alSource3f(source, AL_POSITION, pan, 0.0f, 0.0f);
+}
+
+float Sound::getPan()
+{
+    float x, y, z;
+    alGetSource3f(source, AL_POSITION, &x, &y, &z);
+
+    return x;
+}
+
 void Sound::setLoop(bool loop)
 {
     alSourcei(source, AL_LOOPING, loop);

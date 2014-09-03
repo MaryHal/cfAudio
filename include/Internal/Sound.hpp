@@ -32,6 +32,11 @@ class Sound
         void setVolume(float volume);
         float getVolume();
 
+        // Set the panning of the sound.
+        // Range: [-1.0f, 1.0f]
+        void setPan(float pan);
+        float getPan();
+
         bool isPlaying();
         bool isPaused();
 
