@@ -1,7 +1,6 @@
 #include <Internal/SoundBuffer.hpp>
 #include <Internal/SoundLoader.hpp>
 
-#include <AL/al.h>
 #include <sndfile.h>
 
 #include "../System/Log.hpp"
@@ -66,7 +65,7 @@ void SoundBuffer::update()
     alBufferData(buffer, format, data, size, sampleRate);
 
     // Compute the duration
-    // myDuration = static_cast<float>(mySamples.size()) / SampleRate / ChannelsCount;
+    // duration = static_cast<float>(sampleCount) / sampleRate / channelCount;
 }
 
 unsigned int SoundBuffer::getBufferID() const

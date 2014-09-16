@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <thread>
+#include <mutex>
 
 class Music : public Sound
 {
@@ -47,10 +48,12 @@ class Music : public Sound
         bool loadChunk(SoundChunk& c);
 
     public:
-        // Fill OpenAL buffers
+        // Fill/Clear ALL OpenAL buffers
         bool fillQueue();
-        bool fillAndPushBuffer(unsigned int bufferNum);
         void clearQueue();
+
+        // Fill the index'th buffer.
+        bool fillBuffer(unsigned int index);
 
         // Getters and setters that need to be visible for the streamData function.
         void setStream(bool value);
@@ -79,11 +82,14 @@ class Music : public Sound
 
         SNDFILE* file;
 
+        std::mutex threadMutex;
         std::unique_ptr<std::thread> streamThread;
         bool streaming;
-        unsigned int buffers[BUFFER_COUNT]; // OpenAL buffer handles
-        bool endBuffers[BUFFER_COUNT];      // Buffer finished flags
+        ALuint buffers[BUFFER_COUNT];  // OpenAL buffer handles
+        bool endBuffers[BUFFER_COUNT]; // Buffer finished flags
 
+        // Since we're linking many buffers to a single source and refilling
+        // these buffers periodically, we can't use the built-in OpenAL loop functionality.
         bool loop;
 
         // Sound file data

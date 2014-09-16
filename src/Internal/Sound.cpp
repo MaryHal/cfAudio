@@ -46,6 +46,7 @@ void Sound::play()
 
 void Sound::stop()
 {
+    Console::logf("Stopping %d", source);
     status = Stopped;
     alSourceStop(source);
 }

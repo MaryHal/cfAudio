@@ -6,6 +6,8 @@ Simple C++11 Audio Library. Built on top of OpenAL and libsndfile.
 Basic Usage
 ===========
 
+Be sure to link cfAudio64 (or cfAudio32 for 32-bit systems) and make sure your compiler can find the header files in the `include` directory.
+
 Initialize Listener:
 
     Listener::init();
@@ -33,6 +35,6 @@ Deinitialize Listener when done:
 Issues
 ===========
 
-Currently, seeking while a song is playing/streaming results in varying behavior based on filetype. WAV files seem to work okay, OGG files segfault every time, and FLAC files sometimes hang indefinitely. Backtraces lead me to malloc errors within libsndfile...sometimes.
-
 Playing OGG files results in some crackling noises in the background. From what I've researched, this seems to be a libsndfile problem.
+
+Perhaps in the future, I'll switch from libsndfile to [libavformat](https://www.ffmpeg.org/libavformat.html) and [libavcodec](https://www.ffmpeg.org/libavcodec.html)

@@ -46,6 +46,3 @@ float Listener::getVolume()
 
     return volume;
 }
-
-
-

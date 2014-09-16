@@ -13,6 +13,9 @@ class Sample : public Sound
         Sample(const std::string& filename);
         ~Sample();
 
+        // Load a Sample from a file.
+        // Uses libsndfile, table of supported filetypes can be found here:
+        // http://www.mega-nerd.com/libsndfile/
         void loadSound(const std::string& filename);
 };
 

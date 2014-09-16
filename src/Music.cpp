@@ -4,10 +4,10 @@
 #include "System/Log.hpp"
 
 #include <chrono>
-#include <mutex>
 
 Music::Music(const std::string& filename)
-    : file(NULL),
+    : Sound(),
+      file(NULL),
       streamThread(nullptr),
       streaming(false),
       loop(false),
@@ -34,6 +34,11 @@ void Music::play()
     {
         for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
             endBuffers[i] = false;
+
+        // Technically, no OpenAL sources will be playing yet (still in the
+        // loading phase), but the user, upon calling a "play" function
+        // would (and should) expect the status of the song to be "playing".
+        status = Playing;
 
         streaming = true;
         samplesProcessed = 0;
@@ -63,7 +68,9 @@ void Music::stop()
 
 void Music::seek(float time)
 {
-    std::mutex threadMutex;
+    // stop();
+
+    // std::mutex threadMutex;
     threadMutex.lock();
 
     if (file)
@@ -74,6 +81,8 @@ void Music::seek(float time)
     }
 
     threadMutex.unlock();
+
+    // play();
 }
 
 void Music::relSeek(float time)
@@ -146,7 +155,6 @@ void Music::loadSound(const std::string& filename)
 
 bool Music::loadChunk(SoundChunk& c)
 {
-    std::mutex threadMutex;
     threadMutex.lock();
 
     c.samples = &buffer[0];
@@ -167,22 +175,24 @@ bool Music::fillQueue()
     bool requestStop = false;
     for (unsigned int i = 0; (i < BUFFER_COUNT && !requestStop); ++i)
     {
-        if (fillAndPushBuffer(i))
+        if (fillBuffer(i))
             requestStop = true;
     }
 
     return requestStop;
 }
 
-bool Music::fillAndPushBuffer(unsigned int bufferNum)
+bool Music::fillBuffer(unsigned int index)
 {
     bool requestStop = false;
 
     // Acquire audio data
     SoundChunk chunk = {NULL, 0};
+
     if (!loadChunk(chunk))
     {
-        endBuffers[bufferNum] = true;
+        // Mark this buffer as the last buffer of the file.
+        endBuffers[index] = true;
 
         if (loop)
         {
@@ -190,7 +200,7 @@ bool Music::fillAndPushBuffer(unsigned int bufferNum)
 
             if (!chunk.samples || chunk.sampleCount == 0)
             {
-                fillAndPushBuffer(bufferNum);
+                fillBuffer(index);
             }
         }
         else
@@ -202,7 +212,7 @@ bool Music::fillAndPushBuffer(unsigned int bufferNum)
     // Buffer the data
     if (chunk.samples && chunk.sampleCount)
     {
-        unsigned int buffer = buffers[bufferNum];
+        unsigned int buffer = buffers[index];
 
         // Fill the buffer
         ALsizei alsize = static_cast<ALsizei>(chunk.sampleCount) * sizeof(short);
@@ -327,7 +337,7 @@ void Music::streamData(Music* m)
             // Fill it and push it back into the playing queue
             if (!requestStop)
             {
-                if (m->fillAndPushBuffer(bufferNum))
+                if (m->fillBuffer(bufferNum))
                     requestStop = true;
             }
         }
@@ -336,7 +346,7 @@ void Music::streamData(Music* m)
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 
-    // m->stop();
+    m->stop();
 
     // Unqueue any buffer left in the queue
     m->clearQueue();

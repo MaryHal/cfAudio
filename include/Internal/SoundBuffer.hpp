@@ -1,13 +1,15 @@
 #ifndef _SoundBuffer_h_
 #define _SoundBuffer_h_
 
+#include <AL/al.h>
+
 #include <string>
 #include "../Memory/Buffer.hpp"
 
 class SoundBuffer : public Buffer
 {
     private:
-        unsigned int buffer;
+        ALuint buffer;
 
         std::size_t  sampleCount;
         unsigned int channelCount;
