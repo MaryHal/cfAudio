@@ -43,8 +43,8 @@ class Music : public Sound
 
     private:
         // Load a single chunk of data from the stream file into "c".
-        // Returns true if load was successful, false if next chunk cannot be loaded
-        // (due to error, or if there is no more data to load).
+        // Returns true if load was successful, false if next chunk cannot be
+        // fully loaded (due to error, or if there is no more data to load).
         bool loadChunk(SoundChunk& c);
 
     public:

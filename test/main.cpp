@@ -27,11 +27,10 @@ int main(int argc, char* argv[])
     while (music->isPlaying())
     {
         std::cout << music->getTime() << " / " << music->getDuration() << std::endl;
-        if (music->getStatus() == Stopped)
-        {
-            std::cout << "Stopped?" << std::endl;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+        if (music->getTime() > 10.0f)
+            music->stop();
     }
 
     // printf("%f / %f\n", music.getTime(), music.getDuration());

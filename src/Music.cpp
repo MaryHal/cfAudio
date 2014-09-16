@@ -159,13 +159,21 @@ bool Music::loadChunk(SoundChunk& c)
 
     c.samples = &buffer[0];
 
-    if (file && c.samples && sampleCount)
+    if (file != nullptr && c.samples && sampleCount)
         c.sampleCount = static_cast<std::size_t>(sf_read_short(file, &buffer[0], buffer.size()));
     else
         c.sampleCount = 0;
 
     threadMutex.unlock();
 
+    // The sf_read_XXXX functions return the number of items read.
+    // Unless the end of the file was reached during the read,
+    // the return value should equal the number of items requested.
+    // Attempts to read beyond the end of the file will not result in
+    // an error but will cause the sf_read_XXXX functions to return
+    // less than the number of items requested or 0 if already at the end of the file.
+
+    // Are we at the end of the audio file?
     return c.sampleCount == buffer.size();
 }
 
@@ -309,7 +317,7 @@ void Music::streamData(Music* m)
     bool requestStop = m->fillQueue();
     m->play();
 
-    while (m->isStreaming())
+    while (!requestStop || m->isStreaming())
     {
         ALint processedCount = m->buffersProcessed();
 
