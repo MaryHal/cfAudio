@@ -20,30 +20,15 @@ int main(int argc, char* argv[])
     std::unique_ptr<Sound> music(new Music("data/Melodica.ogg"));
     // std::unique_ptr<Sound> music(new Music("data/hds.flac"));
 
+    music->setLoop(true);
     music->play();
-    music->setVolume(0.1f);
-    music->seek(330.0f);
+    music->seek(340.0f);
 
     while (music->isPlaying())
     {
         std::cout << music->getTime() << " / " << music->getDuration() << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-        if (music->getTime() > 10.0f)
-            music->stop();
     }
-
-    // printf("%f / %f\n", music.getTime(), music.getDuration());
-
-    // sample->setVolume(1.0f);
-    // for (float x = -1.0f; x < 1.0f; x += 0.1f)
-    // {
-    //     sample->setPan(x);
-
-    //     std::cout << sample->getPan() << std::endl;
-    //     sample->play();
-    //     std::this_thread::sleep_for(std::chrono::milliseconds(300));
-    // }
 
     Listener::deinit();
     return 0;

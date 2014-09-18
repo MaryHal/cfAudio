@@ -48,9 +48,9 @@ ifeq ($(config),release)
   DEFINES   += 
   INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -O2 -Wall -std=c++11
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O2 -Wall -std=c++11
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -s -Llib
+  LDFLAGS   += -Llib
   LIBS      += -lopenal -lsndfile -lcfAudio64
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
@@ -92,9 +92,9 @@ ifeq ($(config),release32)
   DEFINES   += 
   INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -O2 -Wall -m32 -std=c++11
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O2 -Wall -m32 -std=c++11
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -s -m32 -L/usr/lib32 -Llib
+  LDFLAGS   += -m32 -L/usr/lib32 -Llib
   LIBS      += -lopenal -lsndfile -lcfAudio32
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
@@ -136,9 +136,9 @@ ifeq ($(config),release64)
   DEFINES   += 
   INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -O2 -Wall -m64 -std=c++11
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O2 -Wall -m64 -std=c++11
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -s -m64 -L/usr/lib64 -Llib
+  LDFLAGS   += -m64 -L/usr/lib64 -Llib
   LIBS      += -lopenal -lsndfile -lcfAudio64
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 

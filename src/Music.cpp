@@ -68,21 +68,18 @@ void Music::stop()
 
 void Music::seek(float time)
 {
-    // stop();
-
     // std::mutex threadMutex;
     threadMutex.lock();
 
     if (file)
     {
+        // clearQueue();
         sf_count_t offset = static_cast<sf_count_t>(time * sampleRate);
         int code = sf_seek(file, offset, SEEK_SET);
         Console::logf("seek %d", code);
     }
 
     threadMutex.unlock();
-
-    // play();
 }
 
 void Music::relSeek(float time)
@@ -204,11 +201,12 @@ bool Music::fillBuffer(unsigned int index)
 
         if (loop)
         {
+            // Seek to the beginning of the song and load the final buffer.
             seek(0);
 
             if (!chunk.samples || chunk.sampleCount == 0)
             {
-                fillBuffer(index);
+                return fillBuffer(index);
             }
         }
         else
@@ -317,19 +315,20 @@ void Music::streamData(Music* m)
     bool requestStop = m->fillQueue();
     m->play();
 
-    while (!requestStop || m->isStreaming())
+    while (!requestStop && m->isStreaming())
     {
         ALint processedCount = m->buffersProcessed();
 
         while (processedCount--)
         {
+            // Get an empty buffer
             ALuint buffer = m->popBuffer();
             unsigned int bufferNum = m->getBufferNum(buffer);
 
-            // Retrieve its size and add it to the samples count
+            // If this buffer is the final buffer for the file, reset the sample count
+            // to prepare for possible music looping.
             if (m->getEndBuffer(bufferNum))
             {
-                // This was the last buffer: reset the sample count
                 m->setSamplesProcessed(0);
                 m->setEndBuffer(bufferNum, false);
             }

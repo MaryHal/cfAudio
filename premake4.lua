@@ -40,7 +40,7 @@ solution "cfAudio"
 
         configuration "Release"
             kind "StaticLib"
-            flags { "Optimize", "ExtraWarnings" }
+            flags { "Symbols", "Optimize", "ExtraWarnings" }
 
 
 
@@ -82,4 +82,4 @@ solution "cfAudio"
 
         configuration "Release"
             kind "ConsoleApp"
-            flags { "Optimize", "ExtraWarnings" }
+            flags { "Symbols", "Optimize", "ExtraWarnings" }
