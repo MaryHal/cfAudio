@@ -78,7 +78,7 @@ class Music : public Sound
         static void streamData(Music* m);
 
     private:
-        static const unsigned int BUFFER_COUNT = 4;
+        static const unsigned int BUFFER_COUNT = 8;
 
         SNDFILE* file;
 

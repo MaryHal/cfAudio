@@ -68,7 +68,6 @@ void Music::stop()
 
 void Music::seek(float time)
 {
-    // std::mutex threadMutex;
     threadMutex.lock();
 
     if (file)
@@ -76,7 +75,16 @@ void Music::seek(float time)
         // clearQueue();
         sf_count_t offset = static_cast<sf_count_t>(time * sampleRate);
         int code = sf_seek(file, offset, SEEK_SET);
-        Console::logf("seek %d", code);
+
+        int error = sf_error(file);
+        if (error == 0)
+        {
+            Console::logf("seek %d", code);
+        }
+        else
+        {
+            Console::logf("libsndfile error(%d): %s", error, sf_strerror(file));
+        }
     }
 
     threadMutex.unlock();
@@ -350,7 +358,7 @@ void Music::streamData(Music* m)
         }
 
         // Leave some time for the other threads if the stream is still playing
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     m->stop();

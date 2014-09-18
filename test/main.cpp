@@ -17,12 +17,12 @@ int main(int argc, char* argv[])
     // Sample sample2("data/Powerup.wav");
     // Sample sample3("data/Randomize.wav");
 
-    std::unique_ptr<Sound> music(new Music("data/Melodica.ogg"));
-    // std::unique_ptr<Sound> music(new Music("data/hds.flac"));
+    // std::unique_ptr<Sound> music(new Music("data/Melodica.ogg"));
+    std::unique_ptr<Sound> music(new Music("data/hds.flac"));
+    music->seek(39.8f);
 
     music->setLoop(true);
     music->play();
-    music->seek(340.0f);
 
     while (music->isPlaying())
     {
