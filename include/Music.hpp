@@ -56,8 +56,8 @@ class Music : public Sound
         bool fillBuffer(unsigned int index);
 
         // Getters and setters that need to be visible for the streamData function.
-        void setStream(bool value);
-        const bool isStreaming() const;
+        // void setStream(bool value);
+        // const bool isStreaming() const;
 
         // Returns the number of processed buffers. I.e., the number of buffers that need
         // to be filled with new data.
@@ -67,21 +67,21 @@ class Music : public Sound
         unsigned int popBuffer();
         unsigned int getBufferNum(ALuint buffer);
 
-        void setSamplesProcessed(unsigned long i);
-        void addSamplesProcessed(unsigned long i);
-        unsigned long getSamplesProcessed();
+        // void setSamplesProcessed(unsigned long i);
+        // void addSamplesProcessed(unsigned long i);
+        // unsigned long getSamplesProcessed();
 
-        void markFinalBuffer(unsigned int bufferNum, bool value);
+        // void markFinalBuffer(unsigned int bufferNum, bool value);
         bool queryFinalBuffer(unsigned int bufferNum);
 
         // Returns true if any buffer is flagged to be an ending buffer and false otherwise.
-        bool finalBufferFound();
+        // bool finalBufferFound();
 
         // Threads run this function to load audio data
-        static void streamData(Music* m);
+        void streamData();
 
     private:
-        static const unsigned int BUFFER_COUNT = 8;
+        static const unsigned int BUFFER_COUNT = 4;
 
         SNDFILE* file;
 
