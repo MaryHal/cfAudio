@@ -59,19 +59,7 @@ void Sound::pause()
     }
     else if (status == Playing)
     {
-        status = Paused;
-        alSourcePause(source);
-    }
-}
-
-void Sound::playOrPause()
-{
-    if (status == Stopped || status == Paused)
-    {
-        play();
-    }
-    else
-    {
+        Console::logf("Pausing %d", source);
         status = Paused;
         alSourcePause(source);
     }
@@ -124,6 +112,11 @@ bool Sound::isPlaying()
 bool Sound::isPaused()
 {
     return status == Paused;
+}
+
+bool Sound::isStopped()
+{
+    return status == Stopped;
 }
 
 void Sound::seek(float time)

@@ -71,8 +71,11 @@ class Music : public Sound
         void addSamplesProcessed(unsigned long i);
         unsigned long getSamplesProcessed();
 
-        void setEndBuffer(unsigned int bufferNum, bool value);
-        bool getEndBuffer(unsigned int bufferNum);
+        void markFinalBuffer(unsigned int bufferNum, bool value);
+        bool queryFinalBuffer(unsigned int bufferNum);
+
+        // Returns true if any buffer is flagged to be an ending buffer and false otherwise.
+        bool finalBufferFound();
 
         // Threads run this function to load audio data
         static void streamData(Music* m);
@@ -86,7 +89,7 @@ class Music : public Sound
         std::unique_ptr<std::thread> streamThread;
         bool streaming;
         ALuint buffers[BUFFER_COUNT];  // OpenAL buffer handles
-        bool endBuffers[BUFFER_COUNT]; // Buffer finished flags
+        bool finalBuffer[BUFFER_COUNT]; // Flags denoting whether buffer i is the final buffer of a file.
 
         // Since we're linking many buffers to a single source and refilling
         // these buffers periodically, we can't use the built-in OpenAL loop functionality.

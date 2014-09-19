@@ -14,7 +14,8 @@ Music::Music(const std::string& filename)
       sampleCount(0),
       channelCount(0),
       sampleRate(0),
-      samplesProcessed(0)
+      samplesProcessed(0),
+      duration(0.0f)
 {
     loadSound(filename);
 }
@@ -24,6 +25,7 @@ Music::~Music()
     stop();
 
     alDeleteBuffers(BUFFER_COUNT, buffers);
+
     if (file)
         sf_close(file);
 }
@@ -33,7 +35,7 @@ void Music::play()
     if (!streaming)
     {
         for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
-            endBuffers[i] = false;
+            finalBuffer[i] = false;
 
         // Technically, no OpenAL sources will be playing yet (still in the
         // loading phase), but the user, upon calling a "play" function
@@ -41,7 +43,7 @@ void Music::play()
         status = Playing;
 
         streaming = true;
-        samplesProcessed = 0;
+        // samplesProcessed = 0;
         // seek(0);
         streamThread.reset(new std::thread(&Music::streamData, this));
     }
@@ -72,14 +74,14 @@ void Music::seek(float time)
 
     if (file)
     {
-        // clearQueue();
         sf_count_t offset = static_cast<sf_count_t>(time * sampleRate);
         int code = sf_seek(file, offset, SEEK_SET);
 
         int error = sf_error(file);
         if (error == 0)
         {
-            Console::logf("seek %d", code);
+            samplesProcessed = static_cast<unsigned int>(time * sampleRate * channelCount);
+            Console::logf("seek %d %d", code, samplesProcessed);
         }
         else
         {
@@ -98,10 +100,10 @@ void Music::relSeek(float time)
 
 float Music::getTime()
 {
-    ALfloat secs = 0.f;
-    alGetSourcef(source, AL_SEC_OFFSET, &secs);
+    ALfloat seconds = 0.f;
+    alGetSourcef(source, AL_SEC_OFFSET, &seconds);
 
-    return secs + static_cast<float>(samplesProcessed) / sampleRate / channelCount;
+    return seconds + static_cast<float>(samplesProcessed) / sampleRate / channelCount;
 }
 
 float Music::getDuration()
@@ -126,7 +128,7 @@ void Music::loadSound(const std::string& filename)
     // Generate Buffers
     alGenBuffers(BUFFER_COUNT, buffers);
     for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
-        endBuffers[i] = false;
+        finalBuffer[i] = false;
     __generateSource();
 
     SF_INFO FileInfos;
@@ -205,7 +207,7 @@ bool Music::fillBuffer(unsigned int index)
     if (!loadChunk(chunk))
     {
         // Mark this buffer as the last buffer of the file.
-        endBuffers[index] = true;
+        finalBuffer[index] = true;
 
         if (loop)
         {
@@ -308,14 +310,27 @@ unsigned long Music::getSamplesProcessed()
     return samplesProcessed;
 }
 
-void Music::setEndBuffer(unsigned int bufferNum, bool value)
+void Music::markFinalBuffer(unsigned int bufferNum, bool value)
 {
-    endBuffers[bufferNum] = value;
+    finalBuffer[bufferNum] = value;
 }
 
-bool Music::getEndBuffer(unsigned int bufferNum)
+bool Music::queryFinalBuffer(unsigned int bufferNum)
 {
-    return endBuffers[bufferNum];
+    return finalBuffer[bufferNum];
+}
+
+bool Music::finalBufferFound()
+{
+    for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
+    {
+        if (finalBuffer[i])
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Music::streamData(Music* m)
@@ -325,6 +340,7 @@ void Music::streamData(Music* m)
 
     while (!requestStop && m->isStreaming())
     {
+        // Get the number of buffers that have already finished playing.
         ALint processedCount = m->buffersProcessed();
 
         while (processedCount--)
@@ -335,10 +351,10 @@ void Music::streamData(Music* m)
 
             // If this buffer is the final buffer for the file, reset the sample count
             // to prepare for possible music looping.
-            if (m->getEndBuffer(bufferNum))
+            if (m->queryFinalBuffer(bufferNum))
             {
                 m->setSamplesProcessed(0);
-                m->setEndBuffer(bufferNum, false);
+                m->markFinalBuffer(bufferNum, false);
             }
             else
             {
@@ -363,6 +379,6 @@ void Music::streamData(Music* m)
 
     m->stop();
 
-    // Unqueue any buffer left in the queue
+    // Clear everything queued up to play.
     m->clearQueue();
 }

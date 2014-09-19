@@ -2,8 +2,8 @@
 #include "Sample.hpp"
 #include "Music.hpp"
 
-// #include <chrono>
-// #include <thread>
+#include <chrono>
+#include <thread>
 
 #include <iostream>
 #include <memory>
@@ -19,15 +19,15 @@ int main(int argc, char* argv[])
 
     // std::unique_ptr<Sound> music(new Music("data/Melodica.ogg"));
     std::unique_ptr<Sound> music(new Music("data/hds.flac"));
-    music->seek(39.8f);
 
+    music->seek(180);
     music->setLoop(true);
     music->play();
 
-    while (music->isPlaying())
+    while (!music->isStopped())
     {
         std::cout << music->getTime() << " / " << music->getDuration() << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     Listener::deinit();

@@ -7,6 +7,8 @@ solution "cfAudio"
     project "build_lib"
         language "C++"
         buildoptions { "-std=c++11" }
+        kind "StaticLib"
+        -- kind "SharedLib"
 
         includedirs { "include" }
         files { "src/**" }
@@ -34,12 +36,10 @@ solution "cfAudio"
         ---------------------------------------
         -- Build rules
         configuration "Debug"
-            kind "StaticLib"
             defines "DEBUG"
             flags { "Symbols", "ExtraWarnings" }
 
         configuration "Release"
-            kind "StaticLib"
             flags { "Symbols", "Optimize", "ExtraWarnings" }
 
 
