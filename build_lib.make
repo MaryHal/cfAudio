@@ -22,17 +22,17 @@ endif
 ifeq ($(config),debug)
   OBJDIR     = obj/Debug/build_lib
   TARGETDIR  = lib
-  TARGET     = $(TARGETDIR)/libcfAudio64.a
+  TARGET     = $(TARGETDIR)/libcfAudio64.so
   DEFINES   += -DDEBUG
   INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall -std=c++11
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall -fPIC -std=c++11
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -Llib
+  LDFLAGS   += -shared -Llib
   LIBS      += -lopenal -lsndfile
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -44,17 +44,17 @@ endif
 ifeq ($(config),release)
   OBJDIR     = obj/Release/build_lib
   TARGETDIR  = lib
-  TARGET     = $(TARGETDIR)/libcfAudio64.a
+  TARGET     = $(TARGETDIR)/libcfAudio64.so
   DEFINES   += 
   INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O2 -Wall -std=c++11
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O2 -Wall -fPIC -std=c++11
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -Llib
+  LDFLAGS   += -shared -Llib
   LIBS      += -lopenal -lsndfile
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -66,17 +66,17 @@ endif
 ifeq ($(config),debug32)
   OBJDIR     = obj/x32/Debug/build_lib
   TARGETDIR  = lib
-  TARGET     = $(TARGETDIR)/libcfAudio32.a
+  TARGET     = $(TARGETDIR)/libcfAudio32.so
   DEFINES   += -DDEBUG
   INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall -m32 -std=c++11
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall -m32 -fPIC -std=c++11
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -m32 -L/usr/lib32 -Llib
+  LDFLAGS   += -shared -m32 -L/usr/lib32 -Llib
   LIBS      += -lopenal -lsndfile
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -88,17 +88,17 @@ endif
 ifeq ($(config),release32)
   OBJDIR     = obj/x32/Release/build_lib
   TARGETDIR  = lib
-  TARGET     = $(TARGETDIR)/libcfAudio32.a
+  TARGET     = $(TARGETDIR)/libcfAudio32.so
   DEFINES   += 
   INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O2 -Wall -m32 -std=c++11
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O2 -Wall -m32 -fPIC -std=c++11
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -m32 -L/usr/lib32 -Llib
+  LDFLAGS   += -shared -m32 -L/usr/lib32 -Llib
   LIBS      += -lopenal -lsndfile
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -110,17 +110,17 @@ endif
 ifeq ($(config),debug64)
   OBJDIR     = obj/x64/Debug/build_lib
   TARGETDIR  = lib
-  TARGET     = $(TARGETDIR)/libcfAudio64.a
+  TARGET     = $(TARGETDIR)/libcfAudio64.so
   DEFINES   += -DDEBUG
   INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall -m64 -std=c++11
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -Wall -m64 -fPIC -std=c++11
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -m64 -L/usr/lib64 -Llib
+  LDFLAGS   += -shared -m64 -L/usr/lib64 -Llib
   LIBS      += -lopenal -lsndfile
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -132,17 +132,17 @@ endif
 ifeq ($(config),release64)
   OBJDIR     = obj/x64/Release/build_lib
   TARGETDIR  = lib
-  TARGET     = $(TARGETDIR)/libcfAudio64.a
+  TARGET     = $(TARGETDIR)/libcfAudio64.so
   DEFINES   += 
   INCLUDES  += -Iinclude
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O2 -Wall -m64 -std=c++11
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -O2 -Wall -m64 -fPIC -std=c++11
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -m64 -L/usr/lib64 -Llib
+  LDFLAGS   += -shared -m64 -L/usr/lib64 -Llib
   LIBS      += -lopenal -lsndfile
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(ARCH) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS

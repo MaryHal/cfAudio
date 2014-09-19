@@ -7,8 +7,8 @@ solution "cfAudio"
     project "build_lib"
         language "C++"
         buildoptions { "-std=c++11" }
-        kind "StaticLib"
-        -- kind "SharedLib"
+        -- kind "StaticLib"
+        kind "SharedLib"
 
         includedirs { "include" }
         files { "src/**" }
