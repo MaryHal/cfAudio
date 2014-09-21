@@ -5,29 +5,37 @@
 #include <chrono>
 #include <thread>
 
-#include <iostream>
 #include <memory>
+#include <cstdio>
 
 int main(int argc, char* argv[])
 {
     Listener::init();
 
-    // std::unique_ptr<Sound> sample(new Sample("data/Coin.wav"));
+    std::unique_ptr<Sound> sample(new Sample("data/Coin.wav"));
     // Sample sample1("data/Coin.wav");
     // Sample sample2("data/Powerup.wav");
     // Sample sample3("data/Randomize.wav");
 
-    std::unique_ptr<Sound> music(new Music("data/Melodica.ogg"));
-    // std::unique_ptr<Sound> music(new Music("data/hds.flac"));
+    std::string songFile = "data/hds.flac";
+    std::unique_ptr<Sound> music;
+    if (argc > 1)
+    {
+        songFile = argv[1];
+    }
 
-    music->seek(330);
+    printf("File: %s\n", songFile.c_str());
+
+    music.reset(new Music(songFile));
+
+    // music->seek(330);
     // music->setLoop(true);
     music->play();
 
     while (!music->isStopped())
     {
-        std::cout << music->getTime() << " / " << music->getDuration() << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        printf("%.2f / %.2f\n", music->getTime(), music->getDuration());
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
     Listener::deinit();

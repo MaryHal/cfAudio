@@ -48,6 +48,8 @@ void Music::play()
             streaming = true;
         }
 
+        seek(0.0f);
+
         streamThread.reset(new std::thread(&Music::streamData, this));
     }
     else
@@ -58,21 +60,20 @@ void Music::play()
 
 void Music::stop()
 {
-    if (status != Stopped)
-    {
+    // if (status != Stopped)
+    // {
         {
             std::lock_guard<std::mutex> lock(threadMutex);
             streaming = false;
         }
 
         streamThread->join();
-
         seek(0.0f);
         // Sound::stop();
         // clearQueue();
 
         samplesProcessed = 0;
-    }
+    // }
 }
 
 void Music::seek(float time)
@@ -128,8 +129,6 @@ bool Music::getLoop()
 
 void Music::loadSound(const std::string& filename)
 {
-    stop();
-
     // Generate Buffers
     alGenBuffers(BUFFER_COUNT, buffers);
     for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
@@ -140,7 +139,10 @@ void Music::loadSound(const std::string& filename)
     file = sf_open(filename.c_str(), SFM_READ, &FileInfos);
     if (!file)
     {
+        int error = sf_error(file);
         Console::logf("Failed to load \"%s\".", filename.c_str());
+        Console::logf("libsndfile error(%d): %s", error, sf_strerror(file));
+
         return;
     }
 
@@ -255,16 +257,6 @@ void Music::clearQueue()
         alSourceUnqueueBuffers(source, 1, &buffer);
 }
 
-// void Music::setStream(bool value)
-// {
-//     streaming = value;
-// }
-
-// const bool Music::isStreaming() const
-// {
-//     return streaming;
-// }
-
 ALint Music::buffersProcessed()
 {
     ALint processed = 0;
@@ -297,43 +289,18 @@ unsigned int Music::getBufferNum(ALuint buffer)
     return bufferNum;
 }
 
-// void Music::setSamplesProcessed(unsigned long i)
-// {
-//     samplesProcessed = i;
-// }
-
-// void Music::addSamplesProcessed(unsigned long i)
-// {
-//     samplesProcessed += i;
-// }
-
-// unsigned long Music::getSamplesProcessed()
-// {
-//     return samplesProcessed;
-// }
-
-// void Music::markFinalBuffer(unsigned int bufferNum, bool value)
-// {
-//     finalBuffer[bufferNum] = value;
-// }
-
-bool Music::queryFinalBuffer(unsigned int bufferNum)
+bool Music::finalBufferFound()
 {
-    return finalBuffer[bufferNum];
+    for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
+    {
+        if (finalBuffer[i])
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
-
-// bool Music::finalBufferFound()
-// {
-//     for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
-//     {
-//         if (finalBuffer[i])
-//         {
-//             return true;
-//         }
-//     }
-
-//     return false;
-// }
 
 void Music::streamData()
 {
@@ -353,7 +320,7 @@ void Music::streamData()
 
             // If this buffer is the final buffer for the file, reset the sample count
             // to prepare for possible music looping.
-            if (queryFinalBuffer(bufferNum))
+            if (finalBuffer[bufferNum])
             {
                 samplesProcessed = 0;
                 finalBuffer[bufferNum] = false;
@@ -382,6 +349,9 @@ void Music::streamData()
     }
 
     Sound::stop();
+
+    // We can't have this thread call Music's stop method because it would cause a
+    // deadlock (it would try to join itself).
     // stop();
 
     // Clear everything queued up to play.
