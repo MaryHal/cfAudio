@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     // Sample sample2("data/Powerup.wav");
     // Sample sample3("data/Randomize.wav");
 
-    // std::string songFile = "data/hds.flac";
+    std::string songFile = "";
     std::unique_ptr<Sound> music;
     if (argc > 1)
     {
