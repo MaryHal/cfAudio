@@ -66,8 +66,8 @@ void Music::stop()
             std::lock_guard<std::mutex> lock(threadMutex);
             streaming = false;
         }
-
         streamThread->join();
+
         seek(0.0f);
         // Sound::stop();
         // clearQueue();
@@ -287,19 +287,6 @@ unsigned int Music::getBufferNum(ALuint buffer)
     }
 
     return bufferNum;
-}
-
-bool Music::finalBufferFound()
-{
-    for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
-    {
-        if (finalBuffer[i])
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 void Music::streamData()

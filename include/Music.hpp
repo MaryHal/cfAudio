@@ -23,7 +23,7 @@ class Music : public Sound
         void stop();
 
         void seek(float time);
-        void relSeek(float time);
+        void relSeek(float time); // Seek relative to current time.
         float getTime();
         float getDuration();
 
@@ -63,7 +63,7 @@ class Music : public Sound
         unsigned int getBufferNum(ALuint buffer);
 
         // Returns true if any buffer is flagged to be an ending buffer and false otherwise.
-        bool finalBufferFound();
+        // bool finalBufferFound();
 
         // Threads run this function to load audio data
         void streamData();

@@ -17,30 +17,23 @@ int main(int argc, char* argv[])
     // Sample sample2("data/Powerup.wav");
     // Sample sample3("data/Randomize.wav");
 
-    std::string songFile = "";
-    std::unique_ptr<Sound> music;
     if (argc > 1)
     {
-        songFile = argv[1];
+        std::string songFile = argv[1];
+        printf("File: %s\n", songFile.c_str());
+
+        std::unique_ptr<Sound> music(new Music(songFile));
+        music->play();
+
+        while (!music->isStopped())
+        {
+            printf("%.2f / %.2f\n", music->getTime(), music->getDuration());
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        }
     }
     else
     {
-        printf("No arguments provided. Give me a music file! (ogg, wav, flac)");
-        return 0;
-    }
-
-    printf("File: %s\n", songFile.c_str());
-
-    music.reset(new Music(songFile));
-
-    // music->seek(330);
-    // music->setLoop(true);
-    music->play();
-
-    while (!music->isStopped())
-    {
-        printf("%.2f / %.2f\n", music->getTime(), music->getDuration());
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        printf("No arguments provided. Give me a music file! (ogg, wav, flac)\n");
     }
 
     Listener::deinit();
