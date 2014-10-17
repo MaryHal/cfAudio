@@ -20,7 +20,7 @@ class Sound
     public:
         Sound();
         Sound(const std::string& filename);
-        ~Sound();
+        virtual ~Sound();
 
         virtual void loadSound(const std::string& filename) = 0;
 

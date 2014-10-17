@@ -122,7 +122,7 @@ void Music::setLoop(bool value)
     loop = value;
 }
 
-bool Music::getLoop()
+bool Music::getLoop() const
 {
     return loop;
 }

@@ -17,18 +17,18 @@ class Music : public Sound
 {
     public:
         Music(const std::string& filename);
-        ~Music();
+        virtual ~Music() override;
 
-        void play();
-        void stop();
+        void play() override;
+        void stop() override;
 
-        void seek(float time);
+        void setLoop(bool value) override;
+        bool getLoop() const override;
+
+        void seek(float time) override;
         void relSeek(float time); // Seek relative to current time.
-        float getTime();
-        float getDuration();
-
-        void setLoop(bool value);
-        bool getLoop();
+        float getTime() override;
+        float getDuration() override;
 
     private:
         struct SoundChunk
@@ -39,7 +39,7 @@ class Music : public Sound
 
         // Load a Song from a file.
         // Uses libsndfile, so supported filetypes are: OGG, WAV, and FLAC.
-        void loadSound(const std::string& filename);
+        void loadSound(const std::string& filename) override;
 
     private:
         // Load a single chunk of data from the stream file into "c".

@@ -11,12 +11,12 @@ class Sample : public Sound
 
     public:
         Sample(const std::string& filename);
-        ~Sample();
+        virtual ~Sample() override;
 
         // Load a Sample from a file.
         // Uses libsndfile, table of supported filetypes can be found here:
         // http://www.mega-nerd.com/libsndfile/
-        void loadSound(const std::string& filename);
+        void loadSound(const std::string& filename) override;
 };
 
 #endif // _Sample_hpp_
