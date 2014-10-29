@@ -10,7 +10,7 @@
 
 int main(int argc, char* argv[])
 {
-    Listener::init();
+    cfAudio::Listener::init();
 
     // std::unique_ptr<Sound> sample(new Sample("data/Coin.wav"));
     // Sample sample1("data/Coin.wav");
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
         std::string songFile = argv[1];
         printf("File: %s\n", songFile.c_str());
 
-        std::unique_ptr<Sound> music(new Music(songFile));
+        std::unique_ptr<cfAudio::Sound> music(new cfAudio::Music(songFile));
         music->play();
 
         while (!music->isStopped())
@@ -36,6 +36,6 @@ int main(int argc, char* argv[])
         printf("No arguments provided. Give me a music file! (ogg, wav, flac)\n");
     }
 
-    Listener::deinit();
+    cfAudio::Listener::deinit();
     return 0;
 }

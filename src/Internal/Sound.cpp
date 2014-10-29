@@ -3,143 +3,146 @@
 
 #include "../System/Log.hpp"
 
-void Sound::__generateSource()
+namespace cfAudio
 {
-    // Setup our source
-    alGenSources(1, &source);
-    alSourcef(source, AL_PITCH, 1);
-    alSourcef(source, AL_GAIN, 0.5);
-    alSource3f(source, AL_POSITION, 0, 0, 0);
-    alSource3f(source, AL_VELOCITY, 0, 0, 0);
-    alSourcei(source, AL_LOOPING, AL_FALSE);
-}
-
-void Sound::__setSource(const unsigned int& bufferID)
-{
-    alSourcei(source, AL_BUFFER, bufferID);
-}
-
-Sound::Sound()
-    : status(Stopped),
-    source(0)
-{
-}
-
-Sound::Sound(const std::string& filename)
-    : status(Stopped),
-    source(0)
-{
-    Console::logf("Sound @ \"%s\" loaded.", filename.c_str());
-}
-
-Sound::~Sound()
-{
-    alDeleteSources(1, &source);
-}
-
-void Sound::play()
-{
-    Console::logf("Play source: %d", source);
-    status = Playing;
-    alSourcePlay(source);
-}
-
-void Sound::stop()
-{
-    Console::logf("Stopping %d", source);
-    status = Stopped;
-    alSourceStop(source);
-}
-
-void Sound::pause()
-{
-    if (status == Paused)
+    void Sound::__generateSource()
     {
-        play();
+        // Setup our source
+        alGenSources(1, &source);
+        alSourcef(source, AL_PITCH, 1);
+        alSourcef(source, AL_GAIN, 0.5);
+        alSource3f(source, AL_POSITION, 0, 0, 0);
+        alSource3f(source, AL_VELOCITY, 0, 0, 0);
+        alSourcei(source, AL_LOOPING, AL_FALSE);
     }
-    else if (status == Playing)
+
+    void Sound::__setSource(const unsigned int& bufferID)
     {
-        Console::logf("Pausing %d", source);
-        status = Paused;
-        alSourcePause(source);
+        alSourcei(source, AL_BUFFER, bufferID);
     }
-}
 
-void Sound::setVolume(float volume)
-{
-    alSourcef(source, AL_GAIN, volume);
-}
+    Sound::Sound()
+        : status(Stopped),
+          source(0)
+    {
+    }
 
-float Sound::getVolume()
-{
-    ALfloat volume;
-    alGetSourcef(source, AL_GAIN, &volume);
+    Sound::Sound(const std::string& filename)
+        : status(Stopped),
+          source(0)
+    {
+        Console::logf("Sound @ \"%s\" loaded.", filename.c_str());
+    }
 
-    return volume;
-}
+    Sound::~Sound()
+    {
+        alDeleteSources(1, &source);
+    }
 
-void Sound::setPan(float pan)
-{
-    alSource3f(source, AL_POSITION, pan, 0.0f, 0.0f);
-}
+    void Sound::play()
+    {
+        Console::logf("Play source: %d", source);
+        status = Playing;
+        alSourcePlay(source);
+    }
 
-float Sound::getPan()
-{
-    float x, y, z;
-    alGetSource3f(source, AL_POSITION, &x, &y, &z);
+    void Sound::stop()
+    {
+        Console::logf("Stopping %d", source);
+        status = Stopped;
+        alSourceStop(source);
+    }
 
-    return x;
-}
+    void Sound::pause()
+    {
+        if (status == Paused)
+        {
+            play();
+        }
+        else if (status == Playing)
+        {
+            Console::logf("Pausing %d", source);
+            status = Paused;
+            alSourcePause(source);
+        }
+    }
 
-void Sound::setLoop(bool loop)
-{
-    alSourcei(source, AL_LOOPING, loop);
-}
+    void Sound::setVolume(float volume)
+    {
+        alSourcef(source, AL_GAIN, volume);
+    }
 
-bool Sound::getLoop() const
-{
-    ALint loop;
-    alGetSourcei(source, AL_LOOPING, &loop);
+    float Sound::getVolume()
+    {
+        ALfloat volume;
+        alGetSourcef(source, AL_GAIN, &volume);
 
-    return loop != 0;
-}
+        return volume;
+    }
 
-bool Sound::isPlaying()
-{
-    return status == Playing;
-}
+    void Sound::setPan(float pan)
+    {
+        alSource3f(source, AL_POSITION, pan, 0.0f, 0.0f);
+    }
 
-bool Sound::isPaused()
-{
-    return status == Paused;
-}
+    float Sound::getPan()
+    {
+        float x, y, z;
+        alGetSource3f(source, AL_POSITION, &x, &y, &z);
 
-bool Sound::isStopped()
-{
-    return status == Stopped;
-}
+        return x;
+    }
 
-void Sound::seek(float time)
-{
-    return;
-}
+    void Sound::setLoop(bool loop)
+    {
+        alSourcei(source, AL_LOOPING, loop);
+    }
 
-float Sound::getTime()
-{
-    return 0;
-}
+    bool Sound::getLoop() const
+    {
+        ALint loop;
+        alGetSourcei(source, AL_LOOPING, &loop);
 
-float Sound::getDuration()
-{
-    return 0;
-}
+        return loop != 0;
+    }
 
-ALuint Sound::getSource()
-{
-    return source;
-}
+    bool Sound::isPlaying()
+    {
+        return status == Playing;
+    }
 
-Status Sound::getStatus()
-{
-    return status;
+    bool Sound::isPaused()
+    {
+        return status == Paused;
+    }
+
+    bool Sound::isStopped()
+    {
+        return status == Stopped;
+    }
+
+    void Sound::seek(float time)
+    {
+        return;
+    }
+
+    float Sound::getTime()
+    {
+        return 0;
+    }
+
+    float Sound::getDuration()
+    {
+        return 0;
+    }
+
+    ALuint Sound::getSource()
+    {
+        return source;
+    }
+
+    Status Sound::getStatus()
+    {
+        return status;
+    }
 }

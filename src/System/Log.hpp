@@ -3,21 +3,24 @@
 
 #include <string>
 
+namespace cfAudio
+{
 #if defined(DEBUG)
-    #define coreAssert(x,y) if(!(x)){ coreFailedAssert(#x, y, __FILE__, __LINE__); }
+#define coreAssert(x,y) if(!(x)){ coreFailedAssert(#x, y, __FILE__, __LINE__); }
     void coreFailedAssert(const std::string& condition,
                           const std::string message,
                           const char* file,
                           int line);
 #else
-    #define coreAssert(x,y) {}
+#define coreAssert(x,y) {}
 #endif
 
-class Console
-{
-    public:
-        static void logf(const char* format, ...);
-        static void log(const std::string& str);
+    class Console
+    {
+        public:
+            static void logf(const char* format, ...);
+            static void log(const std::string& str);
+    };
 };
 
 #endif

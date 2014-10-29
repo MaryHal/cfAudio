@@ -6,49 +6,55 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-enum Status { Stopped, Playing, Paused };
-
-class Sound
+namespace cfAudio
 {
-    protected:
-        Status status;
-        ALuint source;
+    enum Status
+    {
+        Stopped, Playing, Paused
+    };
 
-        void __generateSource();
-        void __setSource(const unsigned int& bufferID);
+    class Sound
+    {
+        protected:
+            Status status;
+            ALuint source;
 
-    public:
-        Sound();
-        Sound(const std::string& filename);
-        virtual ~Sound();
+            void __generateSource();
+            void __setSource(const unsigned int& bufferID);
 
-        virtual void loadSound(const std::string& filename) = 0;
+        public:
+            Sound();
+            Sound(const std::string& filename);
+            virtual ~Sound();
 
-        virtual void play();
-        virtual void stop();
-        void pause();
+            virtual void loadSound(const std::string& filename) = 0;
 
-        void setVolume(float volume);
-        float getVolume();
+            virtual void play();
+            virtual void stop();
+            void pause();
 
-        // Set the panning of the sound.
-        // Range: [-1.0f, 1.0f]
-        void setPan(float pan);
-        float getPan();
+            void setVolume(float volume);
+            float getVolume();
 
-        bool isPlaying();
-        bool isPaused();
-        bool isStopped();
+            // Set the panning of the sound.
+            // Range: [-1.0f, 1.0f]
+            void setPan(float pan);
+            float getPan();
 
-        virtual void setLoop(bool loop);
-        virtual bool getLoop() const;
+            bool isPlaying();
+            bool isPaused();
+            bool isStopped();
 
-        virtual void seek(float time);
-        virtual float getTime();
-        virtual float getDuration();
+            virtual void setLoop(bool loop);
+            virtual bool getLoop() const;
 
-        ALuint getSource();
-        Status getStatus();
-};
+            virtual void seek(float time);
+            virtual float getTime();
+            virtual float getDuration();
+
+            ALuint getSource();
+            Status getStatus();
+    };
+}
 
 #endif // _Sound_hpp_

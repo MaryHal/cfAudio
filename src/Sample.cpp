@@ -1,20 +1,23 @@
 #include <Sample.hpp>
 #include <Internal/SoundLoader.hpp>
 
-Sample::Sample(const std::string& filename)
-    : Sound(filename)
+namespace cfAudio
 {
-    loadSound(filename);
-}
+    Sample::Sample(const std::string& filename)
+        : Sound(filename)
+    {
+        loadSound(filename);
+    }
 
-Sample::~Sample()
-{
-}
+    Sample::~Sample()
+    {
+    }
 
-void Sample::loadSound(const std::string& filename)
-{
-    __generateSource();
-    buffer.loadFromFile(filename);
-    buffer.update();
-    __setSource(buffer.getBufferID());
+    void Sample::loadSound(const std::string& filename)
+    {
+        __generateSource();
+        buffer.loadFromFile(filename);
+        buffer.update();
+        __setSource(buffer.getBufferID());
+    }
 }

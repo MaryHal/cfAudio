@@ -13,87 +13,90 @@
 #include <thread>
 #include <mutex>
 
-class Music : public Sound
+namespace cfAudio
 {
-    public:
-        Music(const std::string& filename);
-        virtual ~Music() override;
+    class Music : public Sound
+    {
+        public:
+            Music(const std::string& filename);
+            virtual ~Music() override;
 
-        void play() override;
-        void stop() override;
+            void play() override;
+            void stop() override;
 
-        void setLoop(bool value) override;
-        bool getLoop() const override;
+            void setLoop(bool value) override;
+            bool getLoop() const override;
 
-        void seek(float time) override;
-        void relSeek(float time); // Seek relative to current time.
-        float getTime() override;
-        float getDuration() override;
+            void seek(float time) override;
+            void relSeek(float time); // Seek relative to current time.
+            float getTime() override;
+            float getDuration() override;
 
-    private:
-        struct SoundChunk
-        {
-            short* samples;
-            std::size_t sampleCount;
-        };
+        private:
+            struct SoundChunk
+            {
+                    short* samples;
+                    std::size_t sampleCount;
+            };
 
-        // Load a Song from a file.
-        // Uses libsndfile, so supported filetypes are: OGG, WAV, and FLAC.
-        void loadSound(const std::string& filename) override;
+            // Load a Song from a file.
+            // Uses libsndfile, so supported filetypes are: OGG, WAV, and FLAC.
+            void loadSound(const std::string& filename) override;
 
-    private:
-        // Load a single chunk of data from the stream file into "c".
-        // Returns true if load was successful, false if next chunk cannot be
-        // fully loaded (due to error, or if there is no more data to load).
-        bool loadChunk(SoundChunk& c);
+        private:
+            // Load a single chunk of data from the stream file into "c".
+            // Returns true if load was successful, false if next chunk cannot be
+            // fully loaded (due to error, or if there is no more data to load).
+            bool loadChunk(SoundChunk& c);
 
-        // Fill/Clear ALL OpenAL buffers
-        bool fillQueue();
-        void clearQueue();
+            // Fill/Clear ALL OpenAL buffers
+            bool fillQueue();
+            void clearQueue();
 
-        // Fill the index'th buffer.
-        bool fillBuffer(unsigned int index);
+            // Fill the index'th buffer.
+            bool fillBuffer(unsigned int index);
 
-        // Returns the number of processed buffers. I.e., the number of buffers that need
-        // to be filled with new data.
-        ALint buffersProcessed();
+            // Returns the number of processed buffers. I.e., the number of buffers that need
+            // to be filled with new data.
+            ALint buffersProcessed();
 
-        // Returns the buffer handle for an unused buffer.
-        unsigned int popBuffer();
-        unsigned int getBufferNum(ALuint buffer);
+            // Returns the buffer handle for an unused buffer.
+            unsigned int popBuffer();
+            unsigned int getBufferNum(ALuint buffer);
 
-        // Returns true if any buffer is flagged to be an ending buffer and false otherwise.
-        // bool finalBufferFound();
+            // Returns true if any buffer is flagged to be an ending buffer and false otherwise.
+            // bool finalBufferFound();
 
-        // Threads run this function to load audio data
-        void streamData();
+            // Threads run this function to load audio data
+            void streamData();
 
-    private:
-        static const unsigned int BUFFER_COUNT = 4;
+        private:
+            static const unsigned int BUFFER_COUNT = 4;
 
-        SNDFILE* file;
+            SNDFILE* file;
 
-        std::mutex threadMutex;
-        std::unique_ptr<std::thread> streamThread;
-        bool streaming;
-        ALuint buffers[BUFFER_COUNT];  // OpenAL buffer handles
-        bool finalBuffer[BUFFER_COUNT]; // Flags denoting whether buffer i is the final buffer of a file.
+            std::mutex threadMutex;
+            std::unique_ptr<std::thread> streamThread;
+            bool streaming;
+            ALuint buffers[BUFFER_COUNT];  // OpenAL buffer handles
+            bool finalBuffer[BUFFER_COUNT]; // Flags denoting whether buffer i is the final buffer of a file.
 
-        // Since we're linking many buffers to a single source and refilling
-        // these buffers periodically, we can't use the built-in OpenAL loop functionality.
-        bool loop;
+            // Since we're linking many buffers to a single source and refilling
+            // these buffers periodically, we can't use the built-in OpenAL loop functionality.
+            bool loop;
 
-        // Sound file data
-        std::size_t  sampleCount;
-        unsigned int channelCount;
-        unsigned int sampleRate;
+            // Sound file data
+            std::size_t  sampleCount;
+            unsigned int channelCount;
+            unsigned int sampleRate;
 
-        ALenum format;
-        unsigned long samplesProcessed;
+            ALenum format;
+            unsigned long samplesProcessed;
 
-        float duration;
+            float duration;
 
-        std::vector<short> buffer;
-};
+            std::vector<short> buffer;
+    };
+}
 
 #endif // _Music_hpp_

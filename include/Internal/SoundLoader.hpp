@@ -4,11 +4,14 @@
 #include <AL/al.h>
 #include "SoundBuffer.hpp"
 
-class SoundLoader
+namespace cfAudio
 {
-    public:
-        // From Channel count, return the OpenAL audio format
-        static ALenum getFormat(unsigned int channels);
-};
+    class SoundLoader
+    {
+        public:
+            // From Channel count, return the OpenAL audio format
+            static ALenum getFormat(unsigned int channels);
+    };
+}
 
 #endif
