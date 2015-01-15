@@ -22,3 +22,6 @@ bin/
 data/
 obj/
 
+/.ninja_deps
+/.ninja_log
+/__pycache__/ninja_syntax.cpython-34.pyc

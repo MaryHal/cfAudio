@@ -121,21 +121,6 @@ namespace cfAudio
         return status == Stopped;
     }
 
-    void Sound::seek(float time)
-    {
-        return;
-    }
-
-    float Sound::getTime()
-    {
-        return 0;
-    }
-
-    float Sound::getDuration()
-    {
-        return 0;
-    }
-
     ALuint Sound::getSource()
     {
         return source;

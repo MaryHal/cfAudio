@@ -21,6 +21,6 @@ namespace cfAudio
             static void logf(const char* format, ...);
             static void log(const std::string& str);
     };
-};
+}
 
 #endif

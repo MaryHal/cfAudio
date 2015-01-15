@@ -1,0 +1,42 @@
+ninja_required_version = 1.3
+ar = ar
+cxx = g++
+cxxflags = -Wall -Wextra -pedantic -pedantic-errors -std=c++11 -DNDEBUG -O3 $
+    -I./cfaudio
+ldflags = -lopenal -lsndfile
+
+rule bootstrap
+  command = python bootstrap.py
+  generator = 1
+rule compile
+  command = $cxx -MMD -MF $out.d -c $cxxflags -Werror $in -o $out
+  description = Compiling $in to $out
+  depfile = $out.d
+  deps = gcc
+rule link
+  command = $cxx $cxxflags $in -o $out $ldflags
+  description = Creating $out
+rule ar
+  command = rm -f $out && $ar crs $out $in
+  description = AR $out
+
+build build.ninja: bootstrap | bootstrap.py
+build obj/src/Sample.o: compile src/Sample.cpp
+build obj/src/Music.o: compile src/Music.cpp
+build obj/src/Listener.o: compile src/Listener.cpp
+build obj/src/Memory/Buffer.o: compile src/Memory/Buffer.cpp
+build obj/src/Internal/Sound.o: compile src/Internal/Sound.cpp
+build obj/src/Internal/SoundLoader.o: compile src/Internal/SoundLoader.cpp
+build obj/src/Internal/SoundBuffer.o: compile src/Internal/SoundBuffer.cpp
+build obj/src/System/Log.o: compile src/System/Log.cpp
+build obj/test/main.o: compile test/main.cpp
+
+build ./lib/libcfaudio.a: ar obj/src/Sample.o obj/src/Music.o $
+    obj/src/Listener.o obj/src/Memory/Buffer.o obj/src/Internal/Sound.o $
+    obj/src/Internal/SoundLoader.o obj/src/Internal/SoundBuffer.o $
+    obj/src/System/Log.o
+
+build ./bin/audio_test: link obj/src/Sample.o obj/src/Music.o $
+    obj/src/Listener.o obj/src/Memory/Buffer.o obj/src/Internal/Sound.o $
+    obj/src/Internal/SoundLoader.o obj/src/Internal/SoundBuffer.o $
+    obj/src/System/Log.o obj/test/main.o

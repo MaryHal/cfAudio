@@ -27,6 +27,9 @@ namespace cfAudio
             Sound(const std::string& filename);
             virtual ~Sound();
 
+            Sound(const Sound&) = delete;
+            Sound& operator=(const Sound&) = delete;
+
             virtual void loadSound(const std::string& filename) = 0;
 
             virtual void play();
@@ -48,9 +51,9 @@ namespace cfAudio
             virtual void setLoop(bool loop);
             virtual bool getLoop() const;
 
-            virtual void seek(float time);
-            virtual float getTime();
-            virtual float getDuration();
+            virtual void seek(float time) = 0;
+            virtual float getTime() = 0;
+            virtual float getDuration() = 0;
 
             ALuint getSource();
             Status getStatus();

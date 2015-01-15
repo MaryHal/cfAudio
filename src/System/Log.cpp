@@ -36,4 +36,4 @@ namespace cfAudio
     {
         fprintf(stdout, "%s\n", str.c_str() );
     }
-};
+}
