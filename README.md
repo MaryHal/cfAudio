@@ -1,4 +1,4 @@
-cfAudio
+cfAudio [![Build Status](https://travis-ci.org/sanford1/cfAudio.svg?branch=master)](https://travis-ci.org/sanford1/cfAudio)
 =======
 
 Simple C++11 Audio Library. Built on top of OpenAL and libsndfile.
