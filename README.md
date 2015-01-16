@@ -6,6 +6,10 @@ Simple C++11 Audio Library. Built on top of OpenAL and libsndfile.
 Basic Usage
 ===========
 
+Dependencies are OpenAL, libsndfile, and the [ninja](https://martine.github.io/ninja/) build system. To build the library, run
+
+    python bootstrap.py && ninja
+
 Be sure to link cfAudio and make sure your compiler can find the header files in the `cfaudio` directory.
 
 Initialize Listener:
@@ -14,7 +18,7 @@ Initialize Listener:
 
 Playing Music:
 
-    Music music("data/Melodica.ogg");
+    Music music("data/MySong.ogg");
     music.play();
     music.pause();
     music.setVolume(0.5f);
@@ -31,6 +35,7 @@ Deinitialize Listener when done:
 
     Listener::deinit();
 
+Since this library depends on libsndfile, [this](http://www.mega-nerd.com/libsndfile/#Features) is a list of compatible file formats.
 
 Issues
 ===========
