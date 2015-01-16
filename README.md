@@ -6,7 +6,7 @@ Simple C++11 Audio Library. Built on top of OpenAL and libsndfile.
 Basic Usage
 ===========
 
-Be sure to link cfAudio64 (or cfAudio32 for 32-bit systems) and make sure your compiler can find the header files in the `include` directory.
+Be sure to link cfAudio and make sure your compiler can find the header files in the `cfaudio` directory.
 
 Initialize Listener:
 
