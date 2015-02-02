@@ -130,4 +130,4 @@ namespace cfAudio
     {
         return status;
     }
-}
+} // namespace cfAudio

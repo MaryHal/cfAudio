@@ -16,4 +16,4 @@ namespace cfAudio
 
         return 0;
     }
-}
+} // namespace cfAudio

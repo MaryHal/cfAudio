@@ -117,4 +117,4 @@ namespace cfAudio
             Console::logf("%f", readFloat());
         }
     }
-}
+} // namespace cfAudio

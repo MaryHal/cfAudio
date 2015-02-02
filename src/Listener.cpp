@@ -45,4 +45,4 @@ namespace cfAudio
 
         return volume;
     }
-}
+} // namespace cfAudio

@@ -79,4 +79,4 @@ namespace cfAudio
     {
         return sampleCount;
     }
-}
+} // namespace cfAudio

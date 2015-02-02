@@ -20,4 +20,4 @@ namespace cfAudio
         buffer.update();
         __setSource(buffer.getBufferID());
     }
-}
+} // namespace cfAudio

@@ -347,4 +347,4 @@ namespace cfAudio
         // Clear everything queued up to play.
         clearQueue();
     }
-}
+} // namespace cfAudio
