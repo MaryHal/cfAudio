@@ -35,6 +35,7 @@ namespace cfAudio
         private:
             struct SoundChunk
             {
+                public:
                     short* samples;
                     std::size_t sampleCount;
             };
@@ -78,7 +79,7 @@ namespace cfAudio
             std::mutex threadMutex;
             std::unique_ptr<std::thread> streamThread;
             bool streaming;
-            ALuint buffers[BUFFER_COUNT];  // OpenAL buffer handles
+            ALuint buffers[BUFFER_COUNT];   // OpenAL buffer handles
             bool finalBuffer[BUFFER_COUNT]; // Flags denoting whether buffer i is the final buffer of a file.
 
             // Since we're linking many buffers to a single source and refilling

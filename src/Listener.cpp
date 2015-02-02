@@ -4,15 +4,15 @@
 
 namespace cfAudio
 {
-    ALCdevice* Listener::device = NULL;
-    ALCcontext* Listener::context = NULL;
+    ALCdevice* Listener::device = nullptr;
+    ALCcontext* Listener::context = nullptr;
 
     void Listener::init()
     {
-        device = alcOpenDevice(NULL);
+        device = alcOpenDevice(nullptr);
         if (device)
         {
-            context = alcCreateContext(device, NULL);
+            context = alcCreateContext(device, nullptr);
             alcMakeContextCurrent(context);
         }
 
@@ -26,7 +26,7 @@ namespace cfAudio
 
     void Listener::deinit()
     {
-        alcMakeContextCurrent(NULL);
+        alcMakeContextCurrent(nullptr);
         if (context)
             alcDestroyContext(context);
         if (device)

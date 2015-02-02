@@ -6,11 +6,11 @@
 namespace cfAudio
 {
     Buffer::Buffer()
-        : data(NULL),
+        : data(nullptr),
           length(0),
-          bufferEnd(NULL),
-          readLoc(NULL),
-          writeLoc(NULL),
+          bufferEnd(nullptr),
+          readLoc(nullptr),
+          writeLoc(nullptr),
           external(false)
     {
     }
@@ -29,7 +29,7 @@ namespace cfAudio
     {
         if (!external)
             delete [] data;
-        data = NULL;
+        data = nullptr;
     }
 
     void Buffer::allocateData(size_t maxSize)

@@ -35,7 +35,7 @@ Deinitialize Listener when done:
 
     Listener::deinit();
 
-Since this library depends on libsndfile, [this](http://www.mega-nerd.com/libsndfile/#Features) is a list of compatible file formats.
+Since this library depends on libsndfile, [here](http://www.mega-nerd.com/libsndfile/#Features) is a list of compatible file formats.
 
 Issues
 ===========

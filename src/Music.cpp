@@ -39,8 +39,8 @@ namespace cfAudio
             {
                 std::lock_guard<std::mutex> lock(threadMutex);
 
-                for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
-                    finalBuffer[i] = false;
+                for (auto& elem : finalBuffer)
+                    elem = false;
 
                 // Technically, no OpenAL sources will be playing yet (still in the
                 // loading phase), but the user, upon calling a "play" function
@@ -133,8 +133,9 @@ namespace cfAudio
     {
         // Generate Buffers
         alGenBuffers(BUFFER_COUNT, buffers);
-        for (unsigned int i = 0; i < BUFFER_COUNT; ++i)
-            finalBuffer[i] = false;
+
+        for (auto& elem : finalBuffer)
+            elem = false;
         __generateSource();
 
         SF_INFO FileInfos;
@@ -209,7 +210,7 @@ namespace cfAudio
         bool requestStop = false;
 
         // Acquire audio data
-        SoundChunk chunk = {NULL, 0};
+        SoundChunk chunk { nullptr, 0 };
 
         if (!loadChunk(chunk))
         {

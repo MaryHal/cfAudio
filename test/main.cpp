@@ -1,6 +1,6 @@
-#include "Listener.hpp"
-#include "Sample.hpp"
-#include "Music.hpp"
+#include <Listener.hpp>
+#include <Sample.hpp>
+#include <Music.hpp>
 
 #include <chrono>
 #include <thread>
