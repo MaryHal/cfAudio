@@ -37,7 +37,7 @@ args = parser.parse_args()
 BUILD_FILENAME = 'build.ninja'
 
 compiler = args.cxx
-include = ['-I./cfaudio']
+include = ['-I./include']
 depends = []
 libdirs = []
 ldflags = ['-lopenal', '-lsndfile']

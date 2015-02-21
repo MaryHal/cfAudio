@@ -1,6 +1,6 @@
-#include <Listener.hpp>
-#include <Sample.hpp>
-#include <Music.hpp>
+#include <cfaudio/Listener.hpp>
+#include <cfaudio/Sample.hpp>
+#include <cfaudio/Music.hpp>
 
 #include <chrono>
 #include <thread>

@@ -1,4 +1,4 @@
-#include <Internal/SoundLoader.hpp>
+#include <cfaudio/Internal/SoundLoader.hpp>
 
 namespace cfAudio
 {

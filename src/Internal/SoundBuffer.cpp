@@ -1,5 +1,5 @@
-#include <Internal/SoundBuffer.hpp>
-#include <Internal/SoundLoader.hpp>
+#include <cfaudio/Internal/SoundBuffer.hpp>
+#include <cfaudio/Internal/SoundLoader.hpp>
 
 #include <sndfile.h>
 

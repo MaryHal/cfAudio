@@ -1,5 +1,5 @@
-#include <Sample.hpp>
-#include <Internal/SoundLoader.hpp>
+#include <cfaudio/Sample.hpp>
+#include <cfaudio/Internal/SoundLoader.hpp>
 
 namespace cfAudio
 {

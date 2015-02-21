@@ -1,4 +1,4 @@
-#include <Memory/Buffer.hpp>
+#include <cfaudio/Memory/Buffer.hpp>
 
 #include "../System/Log.hpp"
 #include <cstring>
